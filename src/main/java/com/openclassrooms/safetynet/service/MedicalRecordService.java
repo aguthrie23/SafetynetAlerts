@@ -23,6 +23,10 @@ public class MedicalRecordService {
 		return medicalRecordsRepository.getMedicalRecords();
 	}
 	
+	public List<MedicalRecord> getMedicalRecordsTwo () {
+		return medicalRecordsRepository.getMedicalRecordsTwo();
+	}
+	
 	
 	
 

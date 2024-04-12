@@ -39,14 +39,14 @@ public class SafetyNetController {
 //http://localhost:8080/myapi/persons
 @RequestMapping(value="/persons", method=RequestMethod.GET)	
 public List<Person> getAllPersons () {
-	System.out.println("here");
+	// System.out.println("here");
 	return personService.getPersons();	
 }
 
 //http://localhost:8080/myapi/firestations
 @RequestMapping(value="/firestations", method=RequestMethod.GET)	
 public List<FireStations> getAllFireStations () {
-	System.out.println("here for fire");
+	// System.out.println("here for fire");
 	return fireStationService.getFireStations();	
 }
 
@@ -73,11 +73,35 @@ public List<MedicalRecord> getAllMedicalRecordsTest () {
 	return testList;
 }
 
+//http://localhost:8080/myapi/testmedicalrecords
+@RequestMapping(value="/testmedicalrecordstwo", method=RequestMethod.GET) 
+public List<MedicalRecord> getAllMedicalRecordsTestTwo () {
+	System.out.println("here for medical RecsTEST2");
+	List<MedicalRecord> testList = new ArrayList<MedicalRecord>();
+	testList = medicalRecordService.getMedicalRecordsTwo();
+	
+	for (MedicalRecord medicalRecord : testList) {
+		System.out.println(medicalRecord.getFirstName() 
+				+ "\t" + medicalRecord.getLastName() 
+				+ "\t" + medicalRecord.getMedicationsList()
+				+ "\t" + medicalRecord.getAllergiesList()) ;			
+	}
+	return testList;
+}
+
+
+
 // http://localhost:8080/myapi/person?firstName=Roger&lastName=Boyd
 @RequestMapping(value="/person", method=RequestMethod.GET)
 public Person getPersonByFirstLast(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName) {
 	
 	return personService.getPersonByFirstLast(firstName, lastName);
+}
+
+// http://localhost:8080/myapi/communityEmail?city=Culver
+@RequestMapping(value="/communityEmail", method=RequestMethod.GET)
+public List<String> getEmailByCity(@RequestParam("city") String city) {
+	return personService.getEmailByCity(city);
 }
 
 

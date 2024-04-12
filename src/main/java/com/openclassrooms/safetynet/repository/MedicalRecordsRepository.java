@@ -10,10 +10,21 @@ import com.openclassrooms.safetynet.domain.MedicalRecord;
 @Repository
 public class MedicalRecordsRepository {
 	
-	private List<MedicalRecord> medicalRecords = new ArrayList<MedicalRecord>();
+	private List<MedicalRecord> medicalRecords = new ArrayList<>();
 
 	public List<MedicalRecord> getMedicalRecords() {
 		return medicalRecords;
+	}
+	
+	public List<MedicalRecord> getMedicalRecordsTwo() {
+		List<MedicalRecord> retList = new ArrayList<>();
+		for (MedicalRecord medicalRecord : medicalRecords) {
+     		MedicalRecord med = new MedicalRecord(medicalRecord.getFirstName(), medicalRecord.getLastName(), 
+     				medicalRecord.getBirthDate(), medicalRecord.getMedicationsList(), medicalRecord.getAllergiesList());
+     		retList.add(med);
+			
+		}
+		return retList;
 	}
 
 	public void addMedicalRecord (MedicalRecord medicalRecord) {
