@@ -5,18 +5,18 @@ import java.util.List;
 import com.jsoniter.any.Any;
 
 public class MedicalRecord {
-	
+
 	private String firstName;
 	private String lastName;
 	private String birthDate;
-	private List<Any> medicationsList;
-	private List<Any> allergiesList;
-	
-	
-	
-	
-	public MedicalRecord(String firstName, String lastName, String birthDate, List<Any> medicationsList,
-			List<Any> allergiesList) {
+	private List<String> medicationsList;
+	private List<String> allergiesList;
+
+
+
+
+	public MedicalRecord(String firstName, String lastName, String birthDate, List<String> medicationsList,
+			List<String> allergiesList) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -42,20 +42,20 @@ public class MedicalRecord {
 	public void setBirthDate(String birthDate) {
 		this.birthDate = birthDate;
 	}
-	public List<Any> getMedicationsList() {
+	public List<String> getMedicationsList() {
 		return medicationsList;
 	}
-	public void setMedicationsList(List<Any> medicationsList) {
-		this.medicationsList = medicationsList;
+	public void setMedicationsList(List<String> medicationsList2) {
+		this.medicationsList = medicationsList2;
 	}
-	public List<Any> getAllergiesList() {
+	public List<String> getAllergiesList() {
 		return allergiesList;
 	}
-	public void setAllergiesList(List<Any> allergiesList) {
-		this.allergiesList = allergiesList;
+	public void setAllergiesList(List<String> allergiesList2) {
+		this.allergiesList = allergiesList2;
 	}
-	
-	
-	
+
+
+
 
 }
