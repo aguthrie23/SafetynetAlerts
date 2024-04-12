@@ -20,7 +20,7 @@ import com.openclassrooms.safetynet.service.MedicalRecordService;
 import com.openclassrooms.safetynet.service.PersonService;
 
 @RestController
-@RequestMapping("/myapi")
+// @RequestMapping("/myapi")
 public class SafetyNetController {
 	
 	private PersonService personService;
