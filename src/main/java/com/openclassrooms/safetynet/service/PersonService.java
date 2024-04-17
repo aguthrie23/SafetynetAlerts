@@ -15,7 +15,7 @@ public class PersonService {
 	
 	PersonRepository personRepository;
 
-	@Autowired
+//	@Autowired
 	public PersonService(PersonRepository personRepository) {
 		super();
 		this.personRepository = personRepository;
@@ -23,7 +23,9 @@ public class PersonService {
 	
 	
 	public List<Person> getPersons() {
-		return personRepository.getPersons();
+		// return personRepository.getPersons();
+		List<Person> testList = personRepository.getPersons();
+		return testList;
 	}
 
 	public Person getPersonByFirstLast(String firstName, String lastName) {

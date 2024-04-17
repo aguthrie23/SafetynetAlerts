@@ -1,27 +1,23 @@
 package com.openclassrooms.safetynet.repository;
 
-import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
-
 import com.openclassrooms.safetynet.domain.Person;
 
 @Repository
 public class PersonRepository {
 	
-	private List<Person> persons = new ArrayList<>();
+	private List<Person> persons = new ArrayList<Person>();
 	
+
 	public void addPerson (Person person) {
 		persons.add(person);
 		
 	}
 	
-	
-	public void removePerson (String firstName, String lastName) {
-		
+	public void removePerson (String firstName, String lastName) {		
 	Person person = findPersonByFirstLast(firstName, lastName);
 	persons.remove(person);
 	
