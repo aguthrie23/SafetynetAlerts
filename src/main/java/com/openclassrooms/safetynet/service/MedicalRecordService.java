@@ -23,9 +23,17 @@ public class MedicalRecordService {
 		return medicalRecordsRepository.getMedicalRecords();
 	}
 	
-	public List<MedicalRecord> getMedicalRecordsTwo () {
-		return medicalRecordsRepository.getMedicalRecordsTwo();
+
+	public MedicalRecord findMedicalRecordByFirstLastName(String firstName, String lastName) {
+	return medicalRecordsRepository.findMedicalRecordByFirstLastName(firstName, lastName);
+
 	}
+	
+	public List<MedicalRecord> getMedicalRecordsByFirstLast (String firstName, String lastName) {
+		return medicalRecordsRepository.getMedicalRecordsByFirstLast(firstName,lastName);
+	}
+	
+	
 	
 	
 	

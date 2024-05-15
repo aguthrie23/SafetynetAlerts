@@ -2,7 +2,9 @@ package com.openclassrooms.safetynet.repository;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.stereotype.Repository;
 
@@ -24,6 +26,29 @@ public class FireStationsRepository {
     public List<FireStations> getFireStations() {
 	return fireStations;
 }
+
+    public Set<String> getFireStationsByStationNumber(String stationNumber) {
+    	  	
+    	Set <String> fireStationsSet = new  HashSet<>();
+    	for (FireStations fireStation : fireStations) {
+			if (fireStation.getStationNumber().equals(stationNumber)) {
+				fireStationsSet = fireStation.getAddresses();
+			}
+    	}
+		return fireStationsSet;
+    	
+    }
+    
+    public String getFireStationNumberByAddress (String address) {
+    	for (FireStations fireStation : fireStations) {
+			if (fireStation.getAddresses().contains(address)) {
+				return fireStation.getStationNumber();
+			}
+		}
+    	return null;
+    	
+    }
+    
 	public void addFireStation(FireStations fireStation) {
 		fireStations.add(fireStation);
 	}

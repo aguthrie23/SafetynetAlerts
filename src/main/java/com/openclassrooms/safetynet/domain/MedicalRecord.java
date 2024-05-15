@@ -2,7 +2,10 @@ package com.openclassrooms.safetynet.domain;
 
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
 import com.jsoniter.any.Any;
+
 
 public class MedicalRecord {
 

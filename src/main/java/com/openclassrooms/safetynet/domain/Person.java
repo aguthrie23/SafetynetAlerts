@@ -1,5 +1,8 @@
 package com.openclassrooms.safetynet.domain;
 
+import org.springframework.stereotype.Component;
+
+
 public class Person {
 	
 	public final String firstName;
