@@ -1,6 +1,7 @@
 package com.openclassrooms.safetynet.domain;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -22,8 +23,11 @@ public class PersonServiced {
 	private String address;
 	private String phoneNumber;
 	private Integer age;
-	private Integer countAdults;
-	private Integer countChildren; 
+
+    
+	
+
+
 
 
 	public PersonServiced(PersonMedicalRecord personMedicalRecord) {
@@ -42,9 +46,13 @@ public class PersonServiced {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
 		LocalDate date = LocalDate.parse(personMedicalRecord.getMedicalRecord().getBirthDate(), formatter);
 	    this.age = Period.between(date, LocalDate.now()).getYears();
+	    
+	    // long count = list.stream().filter(x->x.equals("b")).count(); 
 
 	}
 	
+	
+
 
 	public String getAddress() {
 		return address;

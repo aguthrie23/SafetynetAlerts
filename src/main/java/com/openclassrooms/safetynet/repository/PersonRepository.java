@@ -25,6 +25,30 @@ public class PersonRepository {
 	
 	}
 	
+	public void updatePerson(Person person) {
+		int index = findIndexByFirstLast(person.getFirstName(), person.getLastName());
+		
+		if (index > 0) {
+			persons.set(index,person);
+		}
+	}
+	
+	public Integer findIndexByFirstLast(String firstName, String lastName) {
+		int count = 0;
+		String concatString = firstName.concat(lastName);
+		for (Person person : persons) {
+			
+			if (person.getFirstName().concat(person.getLastName())
+					.equals(concatString))  {
+				return count;
+			}	
+			
+			count++;
+		}
+		
+		return 0;
+	}
+	
 	
 	public Person findPersonByFirstLast(String firstName, String lastName) {
 		String concatString = firstName.concat(lastName);

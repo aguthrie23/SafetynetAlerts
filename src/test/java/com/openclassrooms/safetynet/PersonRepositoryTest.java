@@ -2,6 +2,7 @@ package com.openclassrooms.safetynet;
 
 import static org.mockito.Mockito.verify;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -32,8 +33,13 @@ public class PersonRepositoryTest {
 	@Test
 	public void testAddPerson() {
 		
+		List <Person> retPersons = new ArrayList<Person>();
+		
 		personRepository.addPerson(person1);
+		retPersons = personRepository.getPersons();
 		assertEquals(personRepository.getPersons().size(), 1);
+		assertEquals(retPersons.get(0).getFirstName(), "Abe");
+
 		
 	}
 	

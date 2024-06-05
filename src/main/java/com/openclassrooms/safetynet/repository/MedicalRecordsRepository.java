@@ -53,6 +53,32 @@ public class MedicalRecordsRepository {
 		}
 		return medicalRecordsList;
 	}
+
+
+	
+	public void updateMedicalRecord(MedicalRecord medicalRecord) {
+		int index = findIndexByFirstLast(medicalRecord.getFirstName(), medicalRecord.getLastName());
+		
+		if (index > 0) {
+			medicalRecords.set(index,medicalRecord);
+		}
+	}
+	
+	public Integer findIndexByFirstLast(String firstName, String lastName) {
+		int count = 0;
+		String concatString = firstName.concat(lastName);
+		for (MedicalRecord medicalRecord : medicalRecords) {
+			
+			if (medicalRecord.getFirstName().concat(medicalRecord.getLastName())
+					.equals(concatString))  {
+				return count;
+			}	
+			
+			count++;
+		}
+		
+		return 0;
+	}
 	
 
 }

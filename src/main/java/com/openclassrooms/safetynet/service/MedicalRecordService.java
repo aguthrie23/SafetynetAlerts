@@ -32,6 +32,20 @@ public class MedicalRecordService {
 	public List<MedicalRecord> getMedicalRecordsByFirstLast (String firstName, String lastName) {
 		return medicalRecordsRepository.getMedicalRecordsByFirstLast(firstName,lastName);
 	}
+
+	public void addMedicalRecord(MedicalRecord medicalRecord) {
+		medicalRecordsRepository.addMedicalRecord(medicalRecord);
+		
+	}
+
+	public void removeMedicalRecord(String firstName, String lastName) {
+		medicalRecordsRepository.removeMedicalRecord(firstName, lastName);
+		
+	}
+
+	public void updateMedicalRecord(MedicalRecord medicalRecord) {
+		medicalRecordsRepository.updateMedicalRecord(medicalRecord);		
+	}
 	
 	
 	

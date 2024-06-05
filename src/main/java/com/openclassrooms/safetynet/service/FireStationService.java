@@ -5,11 +5,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.jsoniter.any.Any;
 import com.openclassrooms.safetynet.domain.FireStations;
 import com.openclassrooms.safetynet.domain.HouseHoldInfo;
 import com.openclassrooms.safetynet.domain.Person;
@@ -64,10 +67,13 @@ public class FireStationService {
 	}
 	
 	
+
+	
 	//firestation
-	public List<PersonServiced> getServicedByFirestation(String stationNumber) {
+	public Map<String, List<PersonServiced>> getServicedByFirestation(String stationNumber) {
 		Set<String> fireHouseAddresses = getFireStationsByStationNumber(stationNumber);
 		List <PersonServiced> personInfoList = new ArrayList<PersonServiced>(); 
+		HashMap<String,List <PersonServiced>> summaryMap= new HashMap<String,List <PersonServiced>>();
 		int countAdults = 0;
 		int countChildren = 0;
 		
@@ -80,13 +86,22 @@ public class FireStationService {
 			int result = (personInfo.getAge() > 18) ? ++countAdults :  ++countChildren;
 			
 		}
+	//	String testString = "count children " + countChildren;
+		
+		String testString = "count Adults:" + countAdults + " count Children " + countChildren;
+		
+		
+		
+		summaryMap.put(testString, personInfoList);
 		
 		System.out.println("count children " + countChildren);
 		System.out.println("count adults " + countAdults);
 		
-		return personInfoList;
 		
-	}
+		
+		return summaryMap;
+		
+	}	
 	
 	// flood/stations
 	public HashMap<String, List<HouseHoldInfo>> getHouseholdsByFireStation(List<String> stationNumbers) {
@@ -126,36 +141,69 @@ public class FireStationService {
 	}
 	
 	
-public HashMap<String, List<PersonInfo>> getHouseholdsByFireStationArchive(List<String> stationNumbers) {
-		
-		// This should return a list of all the households in each fire station’s jurisdiction. 
-		// This list needs to group
-		// people by household address, include name, phone number, and age of each person, and any
-		// medications (with dosages) and allergies beside each person’s name.
+// add a firestation
+public void addFireStation(String stationNumber, String address) {
 	
-	//	System.out.println("size " + stationNumbers.size());
-		Set<String> allFireHouseAddresses = new HashSet<String>();
-		HashMap<String,List <PersonInfo>> personAddressMap= new HashMap<String,List <PersonInfo>>();
-	for (String stations : stationNumbers) {
-	//	System.out.println("stations " + stations);
-		Set<String> fireHouseAddresses = getFireStationsByStationNumber(stations);
-	//	System.out.println(fireHouseAddresses);
-		allFireHouseAddresses.addAll(fireHouseAddresses);
-	}
-	
-	
-	for (String string : allFireHouseAddresses) {
-		System.out.println("1 Here " + string);
-		
-		List<PersonInfo> retSvcPersonAndMedRecList =  personService.getPersonAndMedRecordByPersonAddressArchive(string);
-		personAddressMap.put(string, retSvcPersonAndMedRecList);
-	}
-	return personAddressMap;
-	
-	}	
-		
-	
+List<FireStations> allFireStations = getFireStations();
 
+for (FireStations fireStations : allFireStations) {
+	System.out.println(fireStations.getStationNumber());
+	System.out.println(fireStations.getAddresses());
 	
+	if (fireStations.getStationNumber().equals(stationNumber)) {
+		if (fireStations.getAddresses().contains(address)) {
+			
+		// do nothing
+			return;		
+		} else {
+			System.out.println("I am here !!!");
+			fireStations.addAddress(address);
+			return;
+		}
+		
+	}
+}
+
+// if here nothing was returned
+FireStations addNewFirestation = new FireStations(stationNumber).addAddress(address);
+fireStationsRepository.addFireStation(addNewFirestation);
+	
+}
+
+// update an existing firestation from one mapping station number to another
+
+
+
+/////////////////////////
+
+public HashMap<String, List<PersonInfo>> getHouseholdsByFireStationArchive(List<String> stationNumbers) {
+	
+	// This should return a list of all the households in each fire station’s jurisdiction. 
+	// This list needs to group
+	// people by household address, include name, phone number, and age of each person, and any
+	// medications (with dosages) and allergies beside each person’s name.
+
+//	System.out.println("size " + stationNumbers.size());
+	Set<String> allFireHouseAddresses = new HashSet<String>();
+	HashMap<String,List <PersonInfo>> personAddressMap= new HashMap<String,List <PersonInfo>>();
+for (String stations : stationNumbers) {
+//	System.out.println("stations " + stations);
+	Set<String> fireHouseAddresses = getFireStationsByStationNumber(stations);
+//	System.out.println(fireHouseAddresses);
+	allFireHouseAddresses.addAll(fireHouseAddresses);
+}
+
+
+for (String string : allFireHouseAddresses) {
+	System.out.println("1 Here " + string);
+	
+	List<PersonInfo> retSvcPersonAndMedRecList =  personService.getPersonAndMedRecordByPersonAddressArchive(string);
+	personAddressMap.put(string, retSvcPersonAndMedRecList);
+}
+return personAddressMap;
+
+}
+
+
 
 }
