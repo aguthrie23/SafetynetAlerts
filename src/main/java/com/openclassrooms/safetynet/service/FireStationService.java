@@ -147,8 +147,8 @@ public void addFireStation(String stationNumber, String address) {
 List<FireStations> allFireStations = getFireStations();
 
 for (FireStations fireStations : allFireStations) {
-	System.out.println(fireStations.getStationNumber());
-	System.out.println(fireStations.getAddresses());
+//	System.out.println(fireStations.getStationNumber());
+//	System.out.println(fireStations.getAddresses());
 	
 	if (fireStations.getStationNumber().equals(stationNumber)) {
 		if (fireStations.getAddresses().contains(address)) {
@@ -166,15 +166,31 @@ for (FireStations fireStations : allFireStations) {
 
 // if here nothing was returned
 FireStations addNewFirestation = new FireStations(stationNumber).addAddress(address);
-fireStationsRepository.addFireStation(addNewFirestation);
-	
+fireStationsRepository.addFireStation(addNewFirestation);	
 }
 
 // update an existing firestation from one mapping station number to another
+public void updateFirestation(String newStationNumber,String address) {
 
+
+		// remove the firestation address from the list
+		removeFireStation(address);
+	
+	    // add address to new station
+		addFireStation(newStationNumber,address);
+	
+}
+
+public void removeFireStation(String address) {
+
+	fireStationsRepository.removeFireStationAddress(address);
+	
+}
 
 
 /////////////////////////
+
+
 
 public HashMap<String, List<PersonInfo>> getHouseholdsByFireStationArchive(List<String> stationNumbers) {
 	

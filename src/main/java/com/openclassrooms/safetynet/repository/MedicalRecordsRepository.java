@@ -41,18 +41,18 @@ public class MedicalRecordsRepository {
 		return null;
 	}
 	
-	public List<MedicalRecord> getMedicalRecordsByFirstLast(String firstName, String lastName) {
-		
-		String concatString = firstName.concat(lastName);
-		List<MedicalRecord> medicalRecordsList = new ArrayList<MedicalRecord>();
-		for (MedicalRecord medicalRecord : medicalRecords) {
-			if (medicalRecord.getFirstName().concat(medicalRecord.getLastName())
-					.equals(concatString))  {
-				medicalRecordsList.add(medicalRecord);
-			}			
-		}
-		return medicalRecordsList;
-	}
+//	public List<MedicalRecord> getMedicalRecordsByFirstLast(String firstName, String lastName) {
+//		
+//		String concatString = firstName.concat(lastName);
+//		List<MedicalRecord> medicalRecordsList = new ArrayList<MedicalRecord>();
+//		for (MedicalRecord medicalRecord : medicalRecords) {
+//			if (medicalRecord.getFirstName().concat(medicalRecord.getLastName())
+//					.equals(concatString))  {
+//				medicalRecordsList.add(medicalRecord);
+//			}			
+//		}
+//		return medicalRecordsList;
+//	}
 
 
 	

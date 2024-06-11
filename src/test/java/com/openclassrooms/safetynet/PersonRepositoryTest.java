@@ -85,5 +85,17 @@ public class PersonRepositoryTest {
 		assertEquals(personRetList.size(), 1);
 		
 	}
-
+	
+	
+	@Test 
+	public void testUpdatePerson () {
+		Person person = new Person("New","Guy","123-456-7890","23059","123 main st","Richmond","richmond@test.com");
+		personRepository.addPerson(person);
+		personRepository.addPerson(person1);
+		person.setEmail("newEmail@test.com");
+		personRepository.updatePerson(person);
+		assertEquals("newEmail@test.com", personRepository.getPersons().get(0).getEmail());		
+		
+	}
+	
 }

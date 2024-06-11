@@ -22,6 +22,11 @@ public class FireStations {
 		return this;
 	}
 	
+//	public FireStations removeAddress(String address) {
+//		addresses.remove(address);
+//		return this;
+//	}
+	
 	public String getStationNumber() {
 		return stationNumber;
 	}

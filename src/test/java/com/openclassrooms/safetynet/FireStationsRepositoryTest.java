@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 
 import com.openclassrooms.safetynet.domain.FireStations;
@@ -69,6 +71,20 @@ public class FireStationsRepositoryTest {
 		System.out.println("Return is " + fireStationNumRetString);
 		assertNotNull(fireStationNumRetString);
 		assertEquals(expectedResultString, fireStationNumRetString);
+		
+	}
+	
+	@Test
+	public void testRemoveFireStationAddress() {
+		String addressToRemove = "456 Test Address";
+		List <FireStations> retFireStationsListBef = fireStationsRepository.getFireStations();
+		
+		assertTrue(retFireStationsListBef.get(0).getAddresses().contains(addressToRemove));		
+		
+		fireStationsRepository.removeFireStationAddress(addressToRemove);
+		
+		List <FireStations> retFireStationsList = fireStationsRepository.getFireStations();	
+		assertFalse(retFireStationsList.get(0).getAddresses().contains(addressToRemove));
 		
 	}
 	

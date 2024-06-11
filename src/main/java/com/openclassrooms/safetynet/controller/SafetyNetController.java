@@ -133,6 +133,15 @@ public void addFireStation(@RequestParam("stationNumber") String stationNumber, 
 	fireStationService.addFireStation(stationNumber,address);
 }
 
+@PutMapping("/fireStation")
+public void updateFireStation(@RequestParam("stationNumber") String newStationNumber,@RequestParam("address") String address) {
+	fireStationService.updateFirestation(newStationNumber,address);
+}
+
+@DeleteMapping("/fireStation")
+public void removeFireStationAddress(@RequestParam("address") String address) {
+	fireStationService.removeFireStation(address);
+}
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

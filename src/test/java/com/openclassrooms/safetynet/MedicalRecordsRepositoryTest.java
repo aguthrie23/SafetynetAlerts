@@ -66,4 +66,14 @@ public class MedicalRecordsRepositoryTest {
 		assertEquals(medicalRecordsRepository.getMedicalRecords().size(), 1);
 	}
 	
+	@Test
+	public void testUpdateMedicalRecord() {
+		medicalRecordsRepository.addMedicalRecord(medicalRecord1);
+		medicalRecord1.setBirthDate("11/11/1951");
+		medicalRecordsRepository.updateMedicalRecord(medicalRecord1);
+		assertEquals(medicalRecordsRepository.getMedicalRecords().get(0).getBirthDate(), "11/11/1951");
+	}
+	
+
+	
 }

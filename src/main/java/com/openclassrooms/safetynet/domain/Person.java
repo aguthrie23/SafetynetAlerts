@@ -11,7 +11,7 @@ public class Person {
 	public final String zip;
 	public final String address;
 	public final String city;
-	public final String email;
+	public String email;
 	
 	
 
@@ -38,6 +38,14 @@ public String getPhone() {
 public String getEmail() {
 	return email;
 }
+
+
+
+public void setEmail(String email) {
+	this.email = email;
+}
+
+
 
 public static class PersonBuilder {
 	private String firstName;
