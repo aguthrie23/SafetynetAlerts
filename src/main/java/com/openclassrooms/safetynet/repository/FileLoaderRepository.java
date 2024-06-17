@@ -65,13 +65,13 @@ public class FileLoaderRepository {
 							: v.addAddress(anyStation.get("address").toString()));
 		});
 
-		fireStationMap.forEach((k, v) -> System.out.println(k + " = " + v));
+	//	fireStationMap.forEach((k, v) -> System.out.println(k + " = " + v));
 
 		List<FireStations> fireStations = fireStationMap.values().stream().collect(Collectors.toList());
 		fireStations.forEach(fire -> fireStationsRepository.addFireStation(fire));
 
 		Any medicalAny = any.get("medicalrecords");
-		System.out.println("medical any" + medicalAny);
+	//	System.out.println("medical any" + medicalAny);
 
 		medicalAny.forEach(medRec -> {
 			MedicalRecord med = new MedicalRecord(medRec.get("firstName").toString(), medRec.get("lastName").toString(),
@@ -93,10 +93,10 @@ public class FileLoaderRepository {
 			medicalRecordsRepository.addMedicalRecord(med);
 
 		});
-		List<MedicalRecord> testList = medicalRecordsRepository.getMedicalRecords();
-		for (MedicalRecord medicalRecord : testList) {
-			System.out.println(medicalRecord.getFirstName() + "\t" + medicalRecord.getLastName() + "\t"
-					+ medicalRecord.getMedicationsList());
-		}
+//		List<MedicalRecord> testList = medicalRecordsRepository.getMedicalRecords();
+//		for (MedicalRecord medicalRecord : testList) {
+//			System.out.println(medicalRecord.getFirstName() + "\t" + medicalRecord.getLastName() + "\t"
+//					+ medicalRecord.getMedicationsList());
+//		}
 	}
 }

@@ -43,8 +43,9 @@ public class FireStationsRepository {
     }
     
 	public void addFireStation(FireStations fireStation) {
-		fireStations.add(fireStation);
-	}
+			fireStations.add(fireStation);
+		}
+	
 
 	public void removeFireStationAddress(String address) {
 		
@@ -67,12 +68,13 @@ public class FireStationsRepository {
 		
 			if (fireToRemove != null) {
 				fireStations.remove(fireToRemove);
-			}
+			//}
 			
 			
 			FireStations addNewFirestation = new FireStations(existStationNum);
 			set.forEach(a -> addNewFirestation.addAddress(a));
 			addFireStation(addNewFirestation);
+			}
 			
 	}
 	

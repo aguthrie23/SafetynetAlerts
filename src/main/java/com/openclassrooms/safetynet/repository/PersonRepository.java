@@ -66,18 +66,7 @@ public class PersonRepository {
 		return persons;
 	}
 	
-//	public List<Person> getPersonsByFirstLast(String firstName, String lastName) {
-//		
-//		String concatString = firstName.concat(lastName);
-//		List<Person> personList = new ArrayList<Person>();
-//		for (Person person : persons) {
-//			if (person.getFirstName().concat(person.getLastName())
-//					.equals(concatString))  {
-//				personList.add(person);
-//			}			
-//		}
-//		return personList;
-//	}
+
 
 	public List<Person> getPersonByAddress(String address) {
 		List <Person> personList = new ArrayList<Person>();

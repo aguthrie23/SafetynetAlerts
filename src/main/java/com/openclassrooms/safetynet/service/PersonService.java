@@ -11,9 +11,9 @@ import org.springframework.beans.factory.config.PlaceholderConfigurerSupport;
 import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitterReturnValueHandler;
+import org.tinylog.Logger;
 
 import com.openclassrooms.safetynet.domain.PersonInfo;
-import com.openclassrooms.safetynet.domain.PersonInfoArchive;
 import com.openclassrooms.safetynet.domain.PersonMedicalRecord;
 import com.openclassrooms.safetynet.domain.PersonServiced;
 import com.openclassrooms.safetynet.domain.ChildAndPerson;
@@ -30,6 +30,9 @@ public class PersonService {
 	
 	PersonRepository personRepository;
 	MedicalRecordService medicalRecordService;
+	
+	Logger logger;
+	
 
 	@Autowired
 	public PersonService(PersonRepository personRepository
@@ -43,30 +46,47 @@ public class PersonService {
 	
 	// used by getPersons
 	public List<Person> getPersons() {
+		
+		logger.info("Person Service getPersons");
+		
 		 return personRepository.getPersons();
 	}
 	
 	// used by addPerson
 	public void addPerson (Person person) {
+		
+		logger.info("Person Service addPerson");
+		
 		personRepository.addPerson(person);
 	}
 	
 	public void removePerson(String firstName, String lastName) {
+		
+		logger.info("Person Service removePerson");
+		
 		personRepository.removePerson(firstName, lastName);
 	}
 	
 	public void updatePerson (Person person) {
+		
+		logger.info("Person Service updatePerson");
+		
 		personRepository.updatePerson(person);
 	}
 	
 	
 	// Used by childAlert
 	public List<ChildAndPerson> getChildandPersons(String address) {
+		
+		logger.info("Person Service getChildandPersons");
+		
 		List <HouseHoldInfo> personHHList = getPersonAndMedRecordByPersonAddress(address);
 		List <ChildAndPerson> childPersonList = new ArrayList<ChildAndPerson>();
 		List <String> listPerson = new ArrayList<String>();
 		
 		if (personHHList.size() > 0) {
+			
+			logger.debug("getPersonAndMedRecordByPersonAddress has data");
 	
 			List<HouseHoldInfo> personListSorted =
 				personHHList.stream()
@@ -97,6 +117,8 @@ public class PersonService {
 			
 			if (childPersonList.size() > 0) {
 				
+				logger.debug("child and person list has data");
+				
 				for (ChildAndPerson childAndPersonList : childPersonList) {
 					childAndPersonList.setOtherPersons(listPerson);
 					
@@ -113,6 +135,9 @@ public class PersonService {
 	
 	// used by communityEmail
 	public List<String> getEmailByCity(String city) {
+		
+		logger.info("Person Service getEmailByCity");
+		
 		List<Person> personList = personRepository.getPersons();
 		List<String> emailList = new ArrayList<>();
 		for (Person person : personList) {
@@ -124,12 +149,11 @@ public class PersonService {
 		return emailList;
 	}	
 
-//	public Person getPersonByFirstLast(String firstName, String lastName) {
-//		return personRepository.findPersonByFirstLast(firstName, lastName);
-//	}
 	
 	// used by personInfo
 	public List<PersonInfo> getPersonMedRecordByFirstLast (String firstName, String lastName) {
+		
+		logger.info("Person Service getPersonMedRecordByFirstLast");
 	
 		List<PersonInfo> personInfoList = new ArrayList<PersonInfo>();
 		
@@ -137,11 +161,11 @@ public class PersonService {
 		List <PersonMedicalRecord> personMedRecList = getPersonMedicalRecord();
 		
 		if (personMedRecList.size() > 0) {
-			System.out.println("Here");
+			logger.debug("personMedRecList > 0 ");
 		for (PersonMedicalRecord personMedicalRecord : personMedRecList) {
 			
 			if (personMedicalRecord.getPerson().getFirstName().equals(firstName) && personMedicalRecord.getPerson().getLastName().equals(lastName)) {
-				System.out.println("Here2");
+				logger.debug("person med rec first and last equal to first and last passed in ");
 				PersonInfo joinerClass = new PersonInfo(personMedicalRecord);
 				personInfoList.add(joinerClass);			
 			}			
@@ -149,22 +173,30 @@ public class PersonService {
 		return personInfoList;
 		}
 		
+		logger.warn("no data found for getPersonMedicalRecord");
 		return null;		
 	}
 	
 	// used by phoneAlert
 	public List<Person> getPersonsByAddress(String address) {
+		
+		logger.info("Person Service getPersonsByAddress");
+		
 		return personRepository.getPersonByAddress(address);
 		
 	}
 	// used by fire and flood/stations
 	public List<HouseHoldInfo> getPersonAndMedRecordByPersonAddress(String address) {
+		
+		logger.info("Person Service getPersonAndMedRecordByPersonAddress");
+		
 		List <PersonMedicalRecord> personMedRecList = getPersonMedicalRecord();
 		List <HouseHoldInfo> houseHoldInfoList = new ArrayList<HouseHoldInfo>();
 		
-		if (personMedRecList.size() > 0) {
+		if (personMedRecList.size() > 0) {			
 			for (PersonMedicalRecord personMedicalRecord : personMedRecList) {
 				if (personMedicalRecord.getPerson().getAddress().equals(address)) {
+					logger.debug("person med rec address equals address passed in ");
 					HouseHoldInfo joinerClass = new HouseHoldInfo(personMedicalRecord);
 					houseHoldInfoList.add(joinerClass);
 				}
@@ -178,12 +210,16 @@ public class PersonService {
 	
 	// used by firestation
 	public List<PersonServiced> getPersonAndMedRecordByPersonAddressSvc(String address) {
+		
+		logger.info("Person Service getPersonAndMedRecordByPersonAddressSvc");
+		
 		List <PersonMedicalRecord> personMedRecList = getPersonMedicalRecord();
 		List <PersonServiced> personServicedList = new ArrayList<PersonServiced>();
 		
 		if (personMedRecList.size() > 0) {
 			for (PersonMedicalRecord personMedicalRecord : personMedRecList) {
 				if (personMedicalRecord.getPerson().getAddress().equals(address)) {
+					logger.debug("person med rec address equals address passed in ");
 					PersonServiced joinerClass = new PersonServiced(personMedicalRecord);
 					personServicedList.add(joinerClass);
 				}
@@ -192,11 +228,15 @@ public class PersonService {
 			return personServicedList;			
 	}
 	
+		logger.warn("no data found for getPersonMedicalRecord");
 		return null;
 	}	
 	
 	// combine person and medical record
 	public List<PersonMedicalRecord> getPersonMedicalRecord () {
+		
+		logger.info("Person Service getPersonMedicalRecord");
+		
 		List<Person> listGetPersons = personRepository.getPersons();
 		List<MedicalRecord> listMedicalRecords = medicalRecordService.getMedicalRecords();
 		List<PersonMedicalRecord> listPersonMedicalRecord = new ArrayList<PersonMedicalRecord>();
@@ -208,6 +248,7 @@ public class PersonService {
 					 if (medicalRecord.getFirstName().concat(medicalRecord.getLastName())
 							 .equals(person.getFirstName()
 									 .concat(person.getLastName()))) {
+						 
 						 PersonMedicalRecord joinerClass = new PersonMedicalRecord(person, medicalRecord);
 						 listPersonMedicalRecord.add(joinerClass);	
 					 }
@@ -218,54 +259,10 @@ public class PersonService {
 		
 		}
 	    
+		logger.warn("no data found for getPersons");
 		return null;
 		
 	}
-	
-	
-	///// archive stuff
-	
-	// personinfo
-//	public List<PersonInfoArchive> getPersonMedRecordByFirstLastArchive (String firstName, String lastName) {
-//	
-//		List <Person> personList = personRepository.getPersonsByFirstLast(firstName, lastName);
-//		List <MedicalRecord> medicalRecordList = medicalRecordService.getMedicalRecordsByFirstLast(firstName, lastName);
-//		List<PersonInfoArchive> personInfoList = new ArrayList<PersonInfoArchive>();
-//
-//		if (personList.size() > 0 || medicalRecordList.size() > 0) {
-//			for (MedicalRecord medicalRecord : medicalRecordList) {
-//			
-//				for (Person person : personList) {
-//				
-//					PersonInfoArchive joinerClass = new PersonInfoArchive(person, medicalRecord);
-//					personInfoList.add(joinerClass);					
-//				}
-//				
-//			}			
-//			return personInfoList;	
-//		}	
-//		return null;		
-//	}
-//	
-//	public List<PersonInfo> getPersonAndMedRecordByPersonAddressArchive(String address) {
-//		List<PersonInfo> personInfoList = new ArrayList<PersonInfo>();
-//		List<Person> personList = getPersonsByAddress(address);
-//		
-//		for (Person person : personList) {
-//			List <PersonInfo> personInfoListToAdd = getPersonMedRecordByFirstLast(person.getFirstName(), person.getLastName());
-//			personInfoList.addAll(personInfoListToAdd);
-//		}
-//		
-//		
-//		
-//		
-//		return personInfoList;
-//		
-//		
-//	}
-
-
-
 	
 	
 }

@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import com.openclassrooms.safetynet.domain.ChildAndPerson;
 import com.openclassrooms.safetynet.domain.FireStations;
@@ -21,9 +20,12 @@ import com.openclassrooms.safetynet.service.FireStationService;
 import com.openclassrooms.safetynet.service.MedicalRecordService;
 import com.openclassrooms.safetynet.service.PersonService;
 
+import org.tinylog.Logger;
+
 @RestController
-// @RequestMapping("/myapi")
 public class SafetyNetController {
+	
+ Logger logger;
 
 	private PersonService personService;
 	private FireStationService fireStationService;
@@ -43,13 +45,19 @@ public class SafetyNetController {
 //http://localhost:8080/firestation?stationNumber=1
 @RequestMapping(value="/firestation", method=RequestMethod.GET)
 public Map<String, List<PersonServiced>> getServicedByFirestation(@RequestParam("stationNumber") String stationNumber) {
+	
+	logger.info("GET firestation called with param stationNumber " + stationNumber);
+	
 return fireStationService.getServicedByFirestation(stationNumber);
 }
 
 // childAlert
-// http://localhost:8080/childAlert?address=<address>
+// http://localhost:8080/childAlert?address=1509%20Culver%20St
 @RequestMapping(value="/childAlert", params="address", method=RequestMethod.GET)
 public List<ChildAndPerson> getChildandPersons(@RequestParam("address") String address) {
+	
+	logger.info("GET childAlert called with param address " + address);
+	
 return personService.getChildandPersons(address);
 }
 
@@ -57,6 +65,9 @@ return personService.getChildandPersons(address);
 //http://localhost:8080/phoneAlert?firestation=1
 @RequestMapping(value="/phoneAlert", method=RequestMethod.GET)
 public List<String> getPhoneNumbersPhoneAlert(@RequestParam("firestation") String firestation) {
+	
+	logger.info("GET phoneAlert called with param firestation " + firestation);
+	
 return fireStationService.getPhoneNumbersPhoneAlert(firestation);
 }
 
@@ -65,6 +76,9 @@ return fireStationService.getPhoneNumbersPhoneAlert(firestation);
 //http://localhost:8080/fire?address=489%20Manchester%20St
 @RequestMapping(value="/fire", params="address" ,method=RequestMethod.GET)
 public HashMap<String, List<HouseHoldInfo>> getFireStationNumberAndHousehold(@RequestParam("address") String address) {
+	
+	logger.info("GET fire called with param address " + address);
+	
 return fireStationService.getFireNumberandHouseHoldByAddress(address);
 }
 
@@ -72,6 +86,9 @@ return fireStationService.getFireNumberandHouseHoldByAddress(address);
 //@RequestMapping(value="/flood/stations", method=RequestMethod.GET)
 @RequestMapping(value="/flood/stations", params="stationvalues" ,method=RequestMethod.GET)
 public HashMap<String, List<HouseHoldInfo>> getHouseHoldsByFireHouse(@RequestParam("stationvalues") List<String> stationvalues) {
+	
+	logger.info("GET flood/stations called with param stationvalues " + stationvalues);
+	
 return fireStationService.getHouseholdsByFireStation(stationvalues);
 }
 
@@ -82,12 +99,17 @@ return fireStationService.getHouseholdsByFireStation(stationvalues);
 @RequestMapping(value="/personinfo", method=RequestMethod.GET)
 public List<PersonInfo> collectPersonMedRecordByFirstLast(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName) {
 
+	logger.info("GET personinfo called with params firstName " + firstName + " and lastName " + lastName);
+	
 	return personService.getPersonMedRecordByFirstLast(firstName, lastName);
 }
 
 //http://localhost:8080/communityEmail?city=Culver
 @RequestMapping(value="/communityEmail", method=RequestMethod.GET)
 public List<String> getEmailByCity(@RequestParam("city") String city) {
+	
+	logger.info("GET communityEmail called with param city " + city);
+	
 	return personService.getEmailByCity(city);
 }
 
@@ -95,32 +117,49 @@ public List<String> getEmailByCity(@RequestParam("city") String city) {
 // Person Endpoints
 @PostMapping("/person")
 public void addPerson(Person person) {
+	
+	logger.info("Post person add called");
+	
 	personService.addPerson(person);
 }
 
 @DeleteMapping("/person")
 public void removePerson(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName) {
+	
+	logger.info("Delete person with params first name " + firstName + " and last name" + lastName + " called");
+	
 	personService.removePerson(firstName, lastName);
 }
 
 @PutMapping("/person")
 public void updatePerson(Person person) {
+	
+	logger.info("Put person update called");
+	
 	personService.updatePerson(person);
 }
 
 // MedicalRecord Endpoints
 @PostMapping("/medicalRecord")
 public void addMedicalRecord(MedicalRecord medicalRecord) {
+	
+	logger.info("Post medicalRecord add called");
+	
 	medicalRecordService.addMedicalRecord(medicalRecord);
 }
 
 @DeleteMapping("/medicalRecord")
 public void removeMedicalRecord(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName) {
+	
+	logger.info("Delete medicalRecord with params first name " + firstName + " and last name" + lastName + " called");
 	medicalRecordService.removeMedicalRecord(firstName, lastName);
 }
 
 @PutMapping("/medicalRecord")
 public void updateMedicalRecord(MedicalRecord medicalRecord) {
+	
+	logger.info("Put medicalRecord update called");
+	
 	medicalRecordService.updateMedicalRecord(medicalRecord);
 }
 
@@ -129,28 +168,32 @@ public void updateMedicalRecord(MedicalRecord medicalRecord) {
 @PostMapping("/fireStation")
 public void addFireStation(@RequestParam("stationNumber") String stationNumber, @RequestParam("address") String address) {
 	
-	//System.out.println("Here " + fireStations.getAddresses());
+	logger.info("Post fireStation add called");
+	
 	fireStationService.addFireStation(stationNumber,address);
 }
 
 @PutMapping("/fireStation")
 public void updateFireStation(@RequestParam("stationNumber") String newStationNumber,@RequestParam("address") String address) {
+	
+	logger.info("Put fireStation update called with params stationNumber " + newStationNumber + " and address " + address + " called");
 	fireStationService.updateFirestation(newStationNumber,address);
 }
 
 @DeleteMapping("/fireStation")
 public void removeFireStationAddress(@RequestParam("address") String address) {
-	fireStationService.removeFireStation(address);
+	
+	logger.info("Delete fireStation with param address " + address + " called");
+	
+		fireStationService.removeFireStation(address);		
+	
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////
+/// Other Random to Test get methods working correctly below
+///
 
-
-
-////////////////
-///////////////
-/// Other Random to Test get methods working correctly
 @RequestMapping(value="/combinePersonMed", method=RequestMethod.GET)
 public List<PersonMedicalRecord> getPersonMed() {
     return personService.getPersonMedicalRecord();
@@ -160,32 +203,19 @@ public List<PersonMedicalRecord> getPersonMed() {
 //http://localhost:8080/persons
 @RequestMapping(value="/persons", method=RequestMethod.GET)
 public List<Person> getAllPersons () {
-	// System.out.println("here");
 	return personService.getPersons();
 }
 
 //http://localhost:8080/firestations
 @RequestMapping(value="/firestations", method=RequestMethod.GET)
 public List<FireStations> getAllFireStations () {
-	// System.out.println("here for fire");
 	return fireStationService.getFireStations();
 }
 
 //http://localhost:8080/medicalrecords
 @RequestMapping(value="/medicalrecords", method=RequestMethod.GET)
 public List<MedicalRecord> getAllMedicalRecords () {
-	System.out.println("here for medical Recs");
 	return medicalRecordService.getMedicalRecords();
-}
-
-
-
-
-//http://localhost:8080/person?firstName=Roger&lastName=Boyd
-@RequestMapping(value="/person", method=RequestMethod.GET)
-public Person getPersonByFirstLast(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName) {
-
-	return personService.getPersonByFirstLast(firstName, lastName);
 }
 
 

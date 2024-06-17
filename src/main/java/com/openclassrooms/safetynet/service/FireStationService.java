@@ -1,6 +1,7 @@
 package com.openclassrooms.safetynet.service;
 
 import java.security.PublicKey;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -20,11 +21,16 @@ import com.openclassrooms.safetynet.domain.PersonInfo;
 import com.openclassrooms.safetynet.domain.PersonServiced;
 import com.openclassrooms.safetynet.repository.FireStationsRepository;
 
+import org.tinylog.Logger;
+
+
 @Service
 public class FireStationService {
 	
 	FireStationsRepository fireStationsRepository;
 	PersonService personService;
+	
+	Logger logger;
 
 	@Autowired
 	public FireStationService(FireStationsRepository fireStationsRepository,
@@ -35,15 +41,24 @@ public class FireStationService {
 	}
 
 	public List<FireStations> getFireStations(){
+		
+		
+		
 	return fireStationsRepository.getFireStations();	
 	}	
 
 
 	public Set<String> getFireStationsByStationNumber(String stationNumber) {
+		
+		logger.info("FireStation Service getFireStationsByStationNumber");
+		
 	return fireStationsRepository.getFireStationsByStationNumber(stationNumber);
 	}
 	
 	public List<String> getPhoneNumbersPhoneAlert(String stationNumber) {
+		
+		logger.info("FireStation Service getPhoneNumbersPhoneAlert");
+		
 		Set<String> fireAddress = getFireStationsByStationNumber(stationNumber);
 		List<String> phoneNumberList = new ArrayList<String>();
 		List<Person> personList = new ArrayList<>();
@@ -71,6 +86,9 @@ public class FireStationService {
 	
 	//firestation
 	public Map<String, List<PersonServiced>> getServicedByFirestation(String stationNumber) {
+		
+		logger.info("FireStation Service getServicedByFirestation");
+		
 		Set<String> fireHouseAddresses = getFireStationsByStationNumber(stationNumber);
 		List <PersonServiced> personInfoList = new ArrayList<PersonServiced>(); 
 		HashMap<String,List <PersonServiced>> summaryMap= new HashMap<String,List <PersonServiced>>();
@@ -94,8 +112,8 @@ public class FireStationService {
 		
 		summaryMap.put(testString, personInfoList);
 		
-		System.out.println("count children " + countChildren);
-		System.out.println("count adults " + countAdults);
+	//	System.out.println("count children " + countChildren);
+	//	System.out.println("count adults " + countAdults);
 		
 		
 		
@@ -106,6 +124,7 @@ public class FireStationService {
 	// flood/stations
 	public HashMap<String, List<HouseHoldInfo>> getHouseholdsByFireStation(List<String> stationNumbers) {
 		
+		logger.info("FireStation Service getHouseholdsByFireStation");
 	
 		Set<String> allFireHouseAddresses = new HashSet<String>();
 		HashMap<String,List <HouseHoldInfo>> personAddressMap= new HashMap<String,List <HouseHoldInfo>>();
@@ -130,6 +149,8 @@ public class FireStationService {
 	// fire
 	public HashMap<String, List<HouseHoldInfo>> getFireNumberandHouseHoldByAddress(String address) {
 		
+		logger.info("FireStation Service getFireNumberandHouseHoldByAddress");
+		
 		HashMap<String,List <HouseHoldInfo>> personAddressMap= new HashMap<String,List <HouseHoldInfo>>();
 		
 	    String fireHouseNumber = fireStationsRepository.getFireStationNumberByAddress(address);
@@ -144,19 +165,19 @@ public class FireStationService {
 // add a firestation
 public void addFireStation(String stationNumber, String address) {
 	
+	logger.info("FireStation Service addFireStation");
+	
 List<FireStations> allFireStations = getFireStations();
 
 for (FireStations fireStations : allFireStations) {
-//	System.out.println(fireStations.getStationNumber());
-//	System.out.println(fireStations.getAddresses());
 	
 	if (fireStations.getStationNumber().equals(stationNumber)) {
 		if (fireStations.getAddresses().contains(address)) {
 			
 		// do nothing
+			logger.warn("FireStation already exists for {} ", stationNumber + " " + address);
 			return;		
 		} else {
-			System.out.println("I am here !!!");
 			fireStations.addAddress(address);
 			return;
 		}
@@ -172,6 +193,7 @@ fireStationsRepository.addFireStation(addNewFirestation);
 // update an existing firestation from one mapping station number to another
 public void updateFirestation(String newStationNumber,String address) {
 
+	logger.info("FireStation Service updateFirestation");
 
 		// remove the firestation address from the list
 		removeFireStation(address);
@@ -183,43 +205,16 @@ public void updateFirestation(String newStationNumber,String address) {
 
 public void removeFireStation(String address) {
 
-	fireStationsRepository.removeFireStationAddress(address);
+	logger.info("FireStation Service removeFireStation");
+	
+	try {
+		fireStationsRepository.removeFireStationAddress(address);
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		logger.error("exception in removeFireStation " + e);
+		
+	}
 	
 }
-
-
-/////////////////////////
-
-
-
-public HashMap<String, List<PersonInfo>> getHouseholdsByFireStationArchive(List<String> stationNumbers) {
-	
-	// This should return a list of all the households in each fire station’s jurisdiction. 
-	// This list needs to group
-	// people by household address, include name, phone number, and age of each person, and any
-	// medications (with dosages) and allergies beside each person’s name.
-
-//	System.out.println("size " + stationNumbers.size());
-	Set<String> allFireHouseAddresses = new HashSet<String>();
-	HashMap<String,List <PersonInfo>> personAddressMap= new HashMap<String,List <PersonInfo>>();
-for (String stations : stationNumbers) {
-//	System.out.println("stations " + stations);
-	Set<String> fireHouseAddresses = getFireStationsByStationNumber(stations);
-//	System.out.println(fireHouseAddresses);
-	allFireHouseAddresses.addAll(fireHouseAddresses);
-}
-
-
-for (String string : allFireHouseAddresses) {
-	System.out.println("1 Here " + string);
-	
-	List<PersonInfo> retSvcPersonAndMedRecList =  personService.getPersonAndMedRecordByPersonAddressArchive(string);
-	personAddressMap.put(string, retSvcPersonAndMedRecList);
-}
-return personAddressMap;
-
-}
-
-
 
 }
