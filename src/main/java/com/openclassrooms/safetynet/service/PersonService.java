@@ -1,16 +1,12 @@
 package com.openclassrooms.safetynet.service;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.PlaceholderConfigurerSupport;
-import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitterReturnValueHandler;
 import org.tinylog.Logger;
 
 import com.openclassrooms.safetynet.domain.PersonInfo;
@@ -31,9 +27,7 @@ public class PersonService {
 	PersonRepository personRepository;
 	MedicalRecordService medicalRecordService;
 	
-	Logger logger;
 	
-
 	@Autowired
 	public PersonService(PersonRepository personRepository
 			, MedicalRecordService medicalRecordService
@@ -47,7 +41,7 @@ public class PersonService {
 	// used by getPersons
 	public List<Person> getPersons() {
 		
-		logger.info("Person Service getPersons");
+		Logger.info("Person Service getPersons");
 		
 		 return personRepository.getPersons();
 	}
@@ -55,30 +49,40 @@ public class PersonService {
 	// used by addPerson
 	public void addPerson (Person person) {
 		
-		logger.info("Person Service addPerson");
+		Logger.info("Person Service addPerson");
 		
 		personRepository.addPerson(person);
 	}
 	
 	public void removePerson(String firstName, String lastName) {
 		
-		logger.info("Person Service removePerson");
+		Logger.info("Person Service removePerson");
 		
-		personRepository.removePerson(firstName, lastName);
+		try {
+			personRepository.removePerson(firstName, lastName);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			Logger.error("exception in removePerson " + e);
+		}
 	}
 	
-	public void updatePerson (Person person) {
+	public void updatePerson (Person person)  {
 		
-		logger.info("Person Service updatePerson");
+		Logger.info("Person Service updatePerson");
 		
-		personRepository.updatePerson(person);
+		try {
+			personRepository.updatePerson(person);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			Logger.error("exception in updatePerson " + e);
+		}
 	}
 	
 	
 	// Used by childAlert
 	public List<ChildAndPerson> getChildandPersons(String address) {
 		
-		logger.info("Person Service getChildandPersons");
+		Logger.info("Person Service getChildandPersons");
 		
 		List <HouseHoldInfo> personHHList = getPersonAndMedRecordByPersonAddress(address);
 		List <ChildAndPerson> childPersonList = new ArrayList<ChildAndPerson>();
@@ -86,7 +90,7 @@ public class PersonService {
 		
 		if (personHHList.size() > 0) {
 			
-			logger.debug("getPersonAndMedRecordByPersonAddress has data");
+			Logger.debug("getPersonAndMedRecordByPersonAddress has data");
 	
 			List<HouseHoldInfo> personListSorted =
 				personHHList.stream()
@@ -100,11 +104,8 @@ public class PersonService {
 				if (houseHoldInfo.getAge() < adultAge) {
 					ChildAndPerson joinerClass = new ChildAndPerson(houseHoldInfo);	
 					childPersonList.add(joinerClass);
-				//	joinerClass.setPerson(null);
-					
-				//	childPersonList.add(joinerClass);
+
 				} else {
-			//		listPerson.add(houseHoldInfo.ge)
 					   if (childPersonList.size() > 0) {
 						   listPerson.add(houseHoldInfo.getFirstName() + " " +  houseHoldInfo.getLastName());
 					   
@@ -117,7 +118,7 @@ public class PersonService {
 			
 			if (childPersonList.size() > 0) {
 				
-				logger.debug("child and person list has data");
+				Logger.debug("child and person list has data");
 				
 				for (ChildAndPerson childAndPersonList : childPersonList) {
 					childAndPersonList.setOtherPersons(listPerson);
@@ -136,7 +137,7 @@ public class PersonService {
 	// used by communityEmail
 	public List<String> getEmailByCity(String city) {
 		
-		logger.info("Person Service getEmailByCity");
+		Logger.info("Person Service getEmailByCity");
 		
 		List<Person> personList = personRepository.getPersons();
 		List<String> emailList = new ArrayList<>();
@@ -153,7 +154,7 @@ public class PersonService {
 	// used by personInfo
 	public List<PersonInfo> getPersonMedRecordByFirstLast (String firstName, String lastName) {
 		
-		logger.info("Person Service getPersonMedRecordByFirstLast");
+		Logger.info("Person Service getPersonMedRecordByFirstLast");
 	
 		List<PersonInfo> personInfoList = new ArrayList<PersonInfo>();
 		
@@ -161,11 +162,11 @@ public class PersonService {
 		List <PersonMedicalRecord> personMedRecList = getPersonMedicalRecord();
 		
 		if (personMedRecList.size() > 0) {
-			logger.debug("personMedRecList > 0 ");
+			Logger.debug("personMedRecList > 0 ");
 		for (PersonMedicalRecord personMedicalRecord : personMedRecList) {
 			
 			if (personMedicalRecord.getPerson().getFirstName().equals(firstName) && personMedicalRecord.getPerson().getLastName().equals(lastName)) {
-				logger.debug("person med rec first and last equal to first and last passed in ");
+				Logger.debug("person med rec first and last equal to first and last passed in ");
 				PersonInfo joinerClass = new PersonInfo(personMedicalRecord);
 				personInfoList.add(joinerClass);			
 			}			
@@ -173,14 +174,14 @@ public class PersonService {
 		return personInfoList;
 		}
 		
-		logger.warn("no data found for getPersonMedicalRecord");
+		Logger.warn("no data found for getPersonMedicalRecord");
 		return null;		
 	}
 	
 	// used by phoneAlert
 	public List<Person> getPersonsByAddress(String address) {
 		
-		logger.info("Person Service getPersonsByAddress");
+		Logger.info("Person Service getPersonsByAddress");
 		
 		return personRepository.getPersonByAddress(address);
 		
@@ -188,7 +189,7 @@ public class PersonService {
 	// used by fire and flood/stations
 	public List<HouseHoldInfo> getPersonAndMedRecordByPersonAddress(String address) {
 		
-		logger.info("Person Service getPersonAndMedRecordByPersonAddress");
+		Logger.info("Person Service getPersonAndMedRecordByPersonAddress");
 		
 		List <PersonMedicalRecord> personMedRecList = getPersonMedicalRecord();
 		List <HouseHoldInfo> houseHoldInfoList = new ArrayList<HouseHoldInfo>();
@@ -196,7 +197,7 @@ public class PersonService {
 		if (personMedRecList.size() > 0) {			
 			for (PersonMedicalRecord personMedicalRecord : personMedRecList) {
 				if (personMedicalRecord.getPerson().getAddress().equals(address)) {
-					logger.debug("person med rec address equals address passed in ");
+					Logger.debug("person med rec address equals address passed in ");
 					HouseHoldInfo joinerClass = new HouseHoldInfo(personMedicalRecord);
 					houseHoldInfoList.add(joinerClass);
 				}
@@ -211,7 +212,7 @@ public class PersonService {
 	// used by firestation
 	public List<PersonServiced> getPersonAndMedRecordByPersonAddressSvc(String address) {
 		
-		logger.info("Person Service getPersonAndMedRecordByPersonAddressSvc");
+		Logger.info("Person Service getPersonAndMedRecordByPersonAddressSvc");
 		
 		List <PersonMedicalRecord> personMedRecList = getPersonMedicalRecord();
 		List <PersonServiced> personServicedList = new ArrayList<PersonServiced>();
@@ -219,7 +220,7 @@ public class PersonService {
 		if (personMedRecList.size() > 0) {
 			for (PersonMedicalRecord personMedicalRecord : personMedRecList) {
 				if (personMedicalRecord.getPerson().getAddress().equals(address)) {
-					logger.debug("person med rec address equals address passed in ");
+					Logger.debug("person med rec address equals address passed in ");
 					PersonServiced joinerClass = new PersonServiced(personMedicalRecord);
 					personServicedList.add(joinerClass);
 				}
@@ -228,14 +229,14 @@ public class PersonService {
 			return personServicedList;			
 	}
 	
-		logger.warn("no data found for getPersonMedicalRecord");
+		Logger.warn("no data found for getPersonMedicalRecord");
 		return null;
 	}	
 	
 	// combine person and medical record
 	public List<PersonMedicalRecord> getPersonMedicalRecord () {
 		
-		logger.info("Person Service getPersonMedicalRecord");
+		Logger.info("Person Service getPersonMedicalRecord");
 		
 		List<Person> listGetPersons = personRepository.getPersons();
 		List<MedicalRecord> listMedicalRecords = medicalRecordService.getMedicalRecords();
@@ -259,7 +260,7 @@ public class PersonService {
 		
 		}
 	    
-		logger.warn("no data found for getPersons");
+		Logger.warn("no data found for getPersons");
 		return null;
 		
 	}

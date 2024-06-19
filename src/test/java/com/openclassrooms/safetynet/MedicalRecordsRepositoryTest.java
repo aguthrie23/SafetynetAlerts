@@ -7,9 +7,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.openclassrooms.safetynet.domain.MedicalRecord;
+import com.openclassrooms.safetynet.exception.DataNotFoundException;
 import com.openclassrooms.safetynet.repository.MedicalRecordsRepository;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
@@ -60,19 +62,47 @@ public class MedicalRecordsRepositoryTest {
 	
 	@Test
 	public void testRemoveMedicalRecord() {
-		medicalRecordsRepository.addMedicalRecord(medicalRecord1);
-		medicalRecordsRepository.addMedicalRecord(medicalRecord2);
-		medicalRecordsRepository.removeMedicalRecord(medicalRecord1.getFirstName(), medicalRecord1.getLastName());
-		assertEquals(medicalRecordsRepository.getMedicalRecords().size(), 1);
+		try {
+			medicalRecordsRepository.addMedicalRecord(medicalRecord1);
+			medicalRecordsRepository.addMedicalRecord(medicalRecord2);
+			medicalRecordsRepository.removeMedicalRecord(medicalRecord1.getFirstName(), medicalRecord1.getLastName());
+			assertEquals(medicalRecordsRepository.getMedicalRecords().size(), 1);
+		} catch (DataNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	@Test
+	public void testRemoveMedicalRecordException() {
+	
+			Throwable exception = assertThrows(Exception.class, () -> medicalRecordsRepository.removeMedicalRecord(medicalRecord2.getFirstName(), medicalRecord2.getLastName()));
+			assertNotNull(exception);
+		
+	}		
+	
+	@Test
 	public void testUpdateMedicalRecord() {
-		medicalRecordsRepository.addMedicalRecord(medicalRecord1);
-		medicalRecord1.setBirthDate("11/11/1951");
-		medicalRecordsRepository.updateMedicalRecord(medicalRecord1);
-		assertEquals(medicalRecordsRepository.getMedicalRecords().get(0).getBirthDate(), "11/11/1951");
+		try {
+			medicalRecordsRepository.addMedicalRecord(medicalRecord1);
+			medicalRecord1.setBirthDate("11/11/1951");
+			medicalRecordsRepository.updateMedicalRecord(medicalRecord1);
+			assertEquals(medicalRecordsRepository.getMedicalRecords().get(0).getBirthDate(), "11/11/1951");
+		} catch (DataNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
+	
+	@Test 
+	public void testUpdateMedicalRecordException () {
+
+			
+		Throwable exception = assertThrows(Exception.class, () -> medicalRecordsRepository.updateMedicalRecord(medicalRecord1));
+		assertNotNull(exception);
+			
+		
+	}		
 	
 
 	

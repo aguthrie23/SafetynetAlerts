@@ -2,11 +2,6 @@ package com.openclassrooms.safetynet.domain;
 
 import java.util.List;
 
-import org.springframework.stereotype.Component;
-
-import com.jsoniter.any.Any;
-
-
 public class MedicalRecord {
 
 	private String firstName;
@@ -14,8 +9,6 @@ public class MedicalRecord {
 	private String birthDate;
 	private List<String> medicationsList;
 	private List<String> allergiesList;
-
-
 
 
 	public MedicalRecord(String firstName, String lastName, String birthDate, List<String> medicationsList,

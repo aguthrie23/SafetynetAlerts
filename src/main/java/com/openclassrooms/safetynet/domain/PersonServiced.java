@@ -1,15 +1,11 @@
 package com.openclassrooms.safetynet.domain;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-
 
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+
 
 
 public class PersonServiced {
@@ -23,11 +19,6 @@ public class PersonServiced {
 	private String address;
 	private String phoneNumber;
 	private Integer age;
-
-    
-	
-
-
 
 
 	public PersonServiced(PersonMedicalRecord personMedicalRecord) {
@@ -47,7 +38,6 @@ public class PersonServiced {
 		LocalDate date = LocalDate.parse(personMedicalRecord.getMedicalRecord().getBirthDate(), formatter);
 	    this.age = Period.between(date, LocalDate.now()).getYears();
 	    
-	    // long count = list.stream().filter(x->x.equals("b")).count(); 
 
 	}
 	
@@ -114,14 +104,5 @@ public class PersonServiced {
 		this.phoneNumber = phoneNumber;
 	}
 
-
-//	public Person getPerson() {
-//		return person;
-//	}
-//
-//
-//	public MedicalRecord getMedicalRecord() {
-//		return medicalRecord;
-//	}
 
 }

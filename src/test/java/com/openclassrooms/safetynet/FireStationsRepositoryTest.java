@@ -7,15 +7,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 
 import com.openclassrooms.safetynet.domain.FireStations;
-import com.openclassrooms.safetynet.domain.Person;
+import com.openclassrooms.safetynet.exception.DataNotFoundException;
 import com.openclassrooms.safetynet.repository.FireStationsRepository;
-import com.openclassrooms.safetynet.repository.PersonRepository;
 
 public class FireStationsRepositoryTest {
 	
@@ -76,17 +76,32 @@ public class FireStationsRepositoryTest {
 	
 	@Test
 	public void testRemoveFireStationAddress() {
-		String addressToRemove = "456 Test Address";
-		List <FireStations> retFireStationsListBef = fireStationsRepository.getFireStations();
-		
-		assertTrue(retFireStationsListBef.get(0).getAddresses().contains(addressToRemove));		
-		
-		fireStationsRepository.removeFireStationAddress(addressToRemove);
-		
-		List <FireStations> retFireStationsList = fireStationsRepository.getFireStations();	
-		assertFalse(retFireStationsList.get(0).getAddresses().contains(addressToRemove));
+		try {
+			String addressToRemove = "456 Test Address";
+			List <FireStations> retFireStationsListBef = fireStationsRepository.getFireStations();
+			
+			assertTrue(retFireStationsListBef.get(0).getAddresses().contains(addressToRemove));		
+			
+			fireStationsRepository.removeFireStationAddress(addressToRemove);
+			
+			List <FireStations> retFireStationsList = fireStationsRepository.getFireStations();	
+			assertFalse(retFireStationsList.get(0).getAddresses().contains(addressToRemove));
+		} catch (DataNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
+	
+	@Test
+	public void testRemoveFireStationAddressException() {
+			String addressToRemove = "12 NoExist";
+
+		
+		Throwable exception = assertThrows(Exception.class, () -> fireStationsRepository.removeFireStationAddress(addressToRemove));
+		assertNotNull(exception);		
+		
+	}	
 	
 
 }

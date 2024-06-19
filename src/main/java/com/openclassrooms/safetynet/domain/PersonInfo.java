@@ -7,10 +7,6 @@ import java.util.List;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-
 public class PersonInfo {
 	
 	Person person;
@@ -128,15 +124,5 @@ public class PersonInfo {
 	public void setMedicalRecord(MedicalRecord medicalRecord) {
 		this.medicalRecord = medicalRecord;
 	}
-
-
-//	public Person getPerson() {
-//		return person;
-//	}
-//
-//
-//	public MedicalRecord getMedicalRecord() {
-//		return medicalRecord;
-//	}
 
 }

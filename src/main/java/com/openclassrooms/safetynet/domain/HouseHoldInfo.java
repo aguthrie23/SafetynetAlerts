@@ -7,8 +7,6 @@ import java.util.List;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 
 public class HouseHoldInfo {
@@ -19,7 +17,6 @@ public class HouseHoldInfo {
 	
 	private String firstName;
 	private String lastName;
-//	private String address;
 	private Integer age;
     private String phoneNumber;
 
@@ -41,7 +38,6 @@ public class HouseHoldInfo {
 		this.firstName = personMedicalRecord.getPerson().getFirstName();
 		this.lastName = personMedicalRecord.getPerson().getLastName();
 		this.phoneNumber = personMedicalRecord.getPerson().getPhone();
-	//	this.address = personMedicalRecord.getPerson().getAddress();
 
 		
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
@@ -54,15 +50,7 @@ public class HouseHoldInfo {
 	}
 	
 	
-//	public String getAddress() {
-//		return address;
-//	}
-//
-//
-//	public void setAddress(String address) {
-//		this.address = address;
-//	}	
-	
+
 	public Integer getAge() {
 		return age;
 	}
@@ -135,13 +123,5 @@ public class HouseHoldInfo {
 	}
 
 
-//	public Person getPerson() {
-//		return person;
-//	}
-//
-//
-//	public MedicalRecord getMedicalRecord() {
-//		return medicalRecord;
-//	}
 
 }

@@ -1,6 +1,5 @@
 package com.openclassrooms.safetynet;
 
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -17,11 +16,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 import com.openclassrooms.safetynet.domain.MedicalRecord;
-import com.openclassrooms.safetynet.domain.Person;
+import com.openclassrooms.safetynet.exception.DataNotFoundException;
 import com.openclassrooms.safetynet.repository.MedicalRecordsRepository;
-import com.openclassrooms.safetynet.repository.PersonRepository;
 import com.openclassrooms.safetynet.service.MedicalRecordService;
-import com.openclassrooms.safetynet.service.PersonService;
+
 
 public class MedicalRecordServiceTest {
 	
@@ -105,26 +103,39 @@ public class MedicalRecordServiceTest {
 	@Test
 	public void testUpdateMedicalRecord() {
 		
-		medicalRecordsRepository = Mockito.mock(MedicalRecordsRepository.class);
-		
-		medicalRecordService = new MedicalRecordService(medicalRecordsRepository);
-		
+		try {
+			medicalRecordsRepository = Mockito.mock(MedicalRecordsRepository.class);
+			
+			medicalRecordService = new MedicalRecordService(medicalRecordsRepository);
+			
 
-		medicalRecordService.updateMedicalRecord(medicalRecord1);
-		verify(medicalRecordsRepository,times(1)).updateMedicalRecord(medicalRecord1);		
+			medicalRecordService.updateMedicalRecord(medicalRecord1);
+			verify(medicalRecordsRepository,times(1)).updateMedicalRecord(medicalRecord1);
+		} catch (DataNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
 	}
+	
+	
 	
 	@Test
 	public void testRemoveMedicalRecord() {
-		String fName = "first";
-		String lName = "last";
-		medicalRecordsRepository = Mockito.mock(MedicalRecordsRepository.class);
-		
-		medicalRecordService = new MedicalRecordService(medicalRecordsRepository);
-		
+		try {
+			String fName = "first";
+			String lName = "last";
+			medicalRecordsRepository = Mockito.mock(MedicalRecordsRepository.class);
+			
+			medicalRecordService = new MedicalRecordService(medicalRecordsRepository);
+			
 
-		medicalRecordService.removeMedicalRecord(fName, lName);
-		verify(medicalRecordsRepository,times(1)).removeMedicalRecord(fName, lName);
-	}	
+			medicalRecordService.removeMedicalRecord(fName, lName);
+			verify(medicalRecordsRepository,times(1)).removeMedicalRecord(fName, lName);
+		} catch (DataNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+		
 	
 }

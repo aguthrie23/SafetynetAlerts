@@ -25,7 +25,7 @@ public class MedicalRecordService {
 	
 	public List<MedicalRecord> getMedicalRecords () {
 		
-		logger.info("MedicalRecord Service getMedicalRecords");
+		Logger.info("MedicalRecord Service getMedicalRecords");
 		
 		return medicalRecordsRepository.getMedicalRecords();
 	}
@@ -33,39 +33,39 @@ public class MedicalRecordService {
 
 	public MedicalRecord findMedicalRecordByFirstLastName(String firstName, String lastName) {
 		
-		logger.info("MedicalRecord Service findMedicalRecordByFirstLastName");
+		Logger.info("MedicalRecord Service findMedicalRecordByFirstLastName");
 		
 	return medicalRecordsRepository.findMedicalRecordByFirstLastName(firstName, lastName);
 
 	}
 	
-//	public List<MedicalRecord> getMedicalRecordsByFirstLast (String firstName, String lastName) {
-//		return medicalRecordsRepository.getMedicalRecordsByFirstLast(firstName,lastName);
-//	}
 
 	public void addMedicalRecord(MedicalRecord medicalRecord) {
 		
-		logger.info("MedicalRecord Service addMedicalRecord");
+		Logger.info("MedicalRecord Service addMedicalRecord");
 		medicalRecordsRepository.addMedicalRecord(medicalRecord);
 		
 	}
 
 	public void removeMedicalRecord(String firstName, String lastName) {
 		
-		logger.info("MedicalRecord Service removeMedicalRecord");
-		medicalRecordsRepository.removeMedicalRecord(firstName, lastName);
+		Logger.info("MedicalRecord Service removeMedicalRecord");
+		try {
+			medicalRecordsRepository.removeMedicalRecord(firstName, lastName);
+		} catch (Exception e) {
+			Logger.error("exception in removeMedicalRecord " + e);
+		}
 		
 	}
 
 	public void updateMedicalRecord(MedicalRecord medicalRecord) {
 		
-		logger.info("MedicalRecord Service updateMedicalRecord");
-		medicalRecordsRepository.updateMedicalRecord(medicalRecord);		
+		Logger.info("MedicalRecord Service updateMedicalRecord");
+		try {
+			medicalRecordsRepository.updateMedicalRecord(medicalRecord);
+		} catch (Exception e) {
+			Logger.error("exception in updateMedicalRecord " + e);
+		}		
 	}
 	
-	
-	
-	
-	
-
 }

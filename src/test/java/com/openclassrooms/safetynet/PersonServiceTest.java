@@ -1,8 +1,6 @@
 package com.openclassrooms.safetynet;
 
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.mockitoSession;
+
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -10,14 +8,10 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.jupiter.api.BeforeEach;
+
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -28,6 +22,7 @@ import com.openclassrooms.safetynet.domain.Person;
 import com.openclassrooms.safetynet.domain.PersonInfo;
 import com.openclassrooms.safetynet.domain.PersonMedicalRecord;
 import com.openclassrooms.safetynet.domain.PersonServiced;
+import com.openclassrooms.safetynet.exception.DataNotFoundException;
 import com.openclassrooms.safetynet.repository.MedicalRecordsRepository;
 import com.openclassrooms.safetynet.repository.PersonRepository;
 import com.openclassrooms.safetynet.service.MedicalRecordService;
@@ -35,13 +30,7 @@ import com.openclassrooms.safetynet.service.PersonService;
 
 // @ExtendWith(MockitoExtension.class)
 public class PersonServiceTest {
-	
-	
-//	@Mock
-//	PersonRepository personRepository;
-	
-//	@InjectMocks 
-//	PersonService personService;
+
 	
 	
 	@Test
@@ -64,27 +53,6 @@ public class PersonServiceTest {
         assertNotNull(retList);
     }
 	
-//	@Test
-//	public void testGetPersonByFirstLast() {
-//		
-//		PersonRepository personRepository = Mockito.mock(PersonRepository.class);
-//		
-//		PersonService personSvc = new PersonService(personRepository);
-//		
-//		String fNameString = "Test";
-//		String lNameString = "Tester";
-//
-//		Person person = new Person(fNameString,lNameString,"123-456-7890","23059","123 main st","richmond","tester@test.com");
-//		
-//		
-//		when(personRepository.findPersonByFirstLast(fNameString, lNameString)).thenReturn(person);
-//		
-//		Person personReturn = personSvc.getPersonByFirstLast(fNameString, lNameString);
-//		
-//		assertEquals(person, personReturn);
-//		assertNotNull(personReturn);
-//				
-//	}
 
 	@Test
 	public void testGetEmailByCity() {
@@ -159,22 +127,7 @@ PersonService personSvc = new PersonService(personRepository,medicalRecordSvc);
 		
 	}
 	
-//	@Test
-//	public void testGetPersonMedRecordByFirstLast() {
-//		
-//		PersonRepository personRepository = Mockito.mock(PersonRepository.class);		
-//
-//MedicalRecordService medicalRecordSvc = Mockito.mock(MedicalRecordService.class);
-//PersonService personSvc = new PersonService(personRepository,medicalRecordSvc);
-//		
-//		List <PersonInfo> personInfoList = new ArrayList<PersonInfo>();
-//		
-//		
-//		personInfoList = personSvc.getPersonMedRecordByFirstLast(null, null);
-//		
-//	}
 	
-
 	
 	@Test
 	public void testGetPersonsByAddress() {
@@ -249,7 +202,6 @@ PersonService personSvc = new PersonService(personRepository,medicalRecordSvc);
 	@Test
 	public void testGetPersonMedRecordByFirstLast () {
 		PersonRepository personRepository = Mockito.mock(PersonRepository.class);
-	//	MedicalRecordsRepository medicalRecordsRepository = Mockito.mock(MedicalRecordsRepository.class);
 		
 		MedicalRecordService medicalRecordSvc = Mockito.mock(MedicalRecordService.class);
 		
@@ -289,30 +241,40 @@ PersonService personSvc = new PersonService(personRepository,medicalRecordSvc);
 	
 	@Test
 	public void testRemovePerson() {
-		String fName = "first";
-		String lName = "last";
-		PersonRepository personRepository = Mockito.mock(PersonRepository.class);
-		MedicalRecordService medicalRecordSvc = Mockito.mock(MedicalRecordService.class);
-		
-		PersonService personSvc = new PersonService(personRepository,medicalRecordSvc);
-	//	doNothing().when(personRepository).removePerson(null, null);
-		personSvc.removePerson(fName, lName);
-		verify(personRepository,times(1)).removePerson(fName, lName);
+		try {
+			String fName = "first";
+			String lName = "last";
+			PersonRepository personRepository = Mockito.mock(PersonRepository.class);
+			MedicalRecordService medicalRecordSvc = Mockito.mock(MedicalRecordService.class);
+			
+			PersonService personSvc = new PersonService(personRepository,medicalRecordSvc);
+			personSvc.removePerson(fName, lName);
+			verify(personRepository,times(1)).removePerson(fName, lName);
+		} catch (DataNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	@Test
 	public void testUpdatePerson() {
 		
-		PersonRepository personRepository = Mockito.mock(PersonRepository.class);
-		MedicalRecordService medicalRecordSvc = Mockito.mock(MedicalRecordService.class);
-		
-		PersonService personSvc = new PersonService(personRepository,medicalRecordSvc);
-		
-		Person person = new Person("firstname","lastname","123-456-7890","23059","123 main st","richmond","tester@test.com");
-		
-		personSvc.updatePerson(person);
-		verify(personRepository,times(1)).updatePerson(person);		
+		try {
+			PersonRepository personRepository = Mockito.mock(PersonRepository.class);
+			MedicalRecordService medicalRecordSvc = Mockito.mock(MedicalRecordService.class);
+			
+			PersonService personSvc = new PersonService(personRepository,medicalRecordSvc);
+			
+			Person person = new Person("firstname","lastname","123-456-7890","23059","123 main st","richmond","tester@test.com");
+			
+			personSvc.updatePerson(person);
+			verify(personRepository,times(1)).updatePerson(person);
+		} catch (DataNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
 	}
+	
 	
 	@Test 
 	public void testAddPerson() {
@@ -370,12 +332,6 @@ PersonService personSvc = new PersonService(personRepository,medicalRecordSvc);
 		assertEquals(retPersonMedicalRecordList.get(0).getPerson(), person);
 		assertEquals(retPersonMedicalRecordList.get(0).getMedicalRecord(), medicalRecord1);
 		
-	//	for (PersonMedicalRecord personMedicalRecord : retPersonMedicalRecordList) {
-	//		System.out.println(personMedicalRecord.getMedicalRecord().getFirstName());
-	//		System.out.println(personMedicalRecord.getPerson().getLastName());
-	//		System.out.println(personMedicalRecord.getMedicalRecord().getAllergiesList());
-			
-	//	}
 		
 		
 	}

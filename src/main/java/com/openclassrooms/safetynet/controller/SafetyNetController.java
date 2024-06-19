@@ -1,7 +1,5 @@
 package com.openclassrooms.safetynet.controller;
 
-import java.security.PublicKey;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +23,6 @@ import org.tinylog.Logger;
 @RestController
 public class SafetyNetController {
 	
- Logger logger;
 
 	private PersonService personService;
 	private FireStationService fireStationService;
@@ -46,7 +43,7 @@ public class SafetyNetController {
 @RequestMapping(value="/firestation", method=RequestMethod.GET)
 public Map<String, List<PersonServiced>> getServicedByFirestation(@RequestParam("stationNumber") String stationNumber) {
 	
-	logger.info("GET firestation called with param stationNumber " + stationNumber);
+	Logger.info("GET firestation called with param stationNumber " + stationNumber);
 	
 return fireStationService.getServicedByFirestation(stationNumber);
 }
@@ -56,7 +53,7 @@ return fireStationService.getServicedByFirestation(stationNumber);
 @RequestMapping(value="/childAlert", params="address", method=RequestMethod.GET)
 public List<ChildAndPerson> getChildandPersons(@RequestParam("address") String address) {
 	
-	logger.info("GET childAlert called with param address " + address);
+	Logger.info("GET childAlert called with param address " + address);
 	
 return personService.getChildandPersons(address);
 }
@@ -66,7 +63,7 @@ return personService.getChildandPersons(address);
 @RequestMapping(value="/phoneAlert", method=RequestMethod.GET)
 public List<String> getPhoneNumbersPhoneAlert(@RequestParam("firestation") String firestation) {
 	
-	logger.info("GET phoneAlert called with param firestation " + firestation);
+	Logger.info("GET phoneAlert called with param firestation " + firestation);
 	
 return fireStationService.getPhoneNumbersPhoneAlert(firestation);
 }
@@ -77,7 +74,7 @@ return fireStationService.getPhoneNumbersPhoneAlert(firestation);
 @RequestMapping(value="/fire", params="address" ,method=RequestMethod.GET)
 public HashMap<String, List<HouseHoldInfo>> getFireStationNumberAndHousehold(@RequestParam("address") String address) {
 	
-	logger.info("GET fire called with param address " + address);
+	Logger.info("GET fire called with param address " + address);
 	
 return fireStationService.getFireNumberandHouseHoldByAddress(address);
 }
@@ -87,7 +84,7 @@ return fireStationService.getFireNumberandHouseHoldByAddress(address);
 @RequestMapping(value="/flood/stations", params="stationvalues" ,method=RequestMethod.GET)
 public HashMap<String, List<HouseHoldInfo>> getHouseHoldsByFireHouse(@RequestParam("stationvalues") List<String> stationvalues) {
 	
-	logger.info("GET flood/stations called with param stationvalues " + stationvalues);
+	Logger.info("GET flood/stations called with param stationvalues " + stationvalues);
 	
 return fireStationService.getHouseholdsByFireStation(stationvalues);
 }
@@ -99,7 +96,7 @@ return fireStationService.getHouseholdsByFireStation(stationvalues);
 @RequestMapping(value="/personinfo", method=RequestMethod.GET)
 public List<PersonInfo> collectPersonMedRecordByFirstLast(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName) {
 
-	logger.info("GET personinfo called with params firstName " + firstName + " and lastName " + lastName);
+	Logger.info("GET personinfo called with params firstName " + firstName + " and lastName " + lastName);
 	
 	return personService.getPersonMedRecordByFirstLast(firstName, lastName);
 }
@@ -108,7 +105,7 @@ public List<PersonInfo> collectPersonMedRecordByFirstLast(@RequestParam("firstNa
 @RequestMapping(value="/communityEmail", method=RequestMethod.GET)
 public List<String> getEmailByCity(@RequestParam("city") String city) {
 	
-	logger.info("GET communityEmail called with param city " + city);
+	Logger.info("GET communityEmail called with param city " + city);
 	
 	return personService.getEmailByCity(city);
 }
@@ -118,7 +115,7 @@ public List<String> getEmailByCity(@RequestParam("city") String city) {
 @PostMapping("/person")
 public void addPerson(Person person) {
 	
-	logger.info("Post person add called");
+	Logger.info("Post person add called");
 	
 	personService.addPerson(person);
 }
@@ -126,7 +123,7 @@ public void addPerson(Person person) {
 @DeleteMapping("/person")
 public void removePerson(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName) {
 	
-	logger.info("Delete person with params first name " + firstName + " and last name" + lastName + " called");
+	Logger.info("Delete person with params first name " + firstName + " and last name" + lastName + " called");
 	
 	personService.removePerson(firstName, lastName);
 }
@@ -134,7 +131,7 @@ public void removePerson(@RequestParam("firstName") String firstName, @RequestPa
 @PutMapping("/person")
 public void updatePerson(Person person) {
 	
-	logger.info("Put person update called");
+	Logger.info("Put person update called");
 	
 	personService.updatePerson(person);
 }
@@ -143,7 +140,7 @@ public void updatePerson(Person person) {
 @PostMapping("/medicalRecord")
 public void addMedicalRecord(MedicalRecord medicalRecord) {
 	
-	logger.info("Post medicalRecord add called");
+	Logger.info("Post medicalRecord add called");
 	
 	medicalRecordService.addMedicalRecord(medicalRecord);
 }
@@ -151,14 +148,14 @@ public void addMedicalRecord(MedicalRecord medicalRecord) {
 @DeleteMapping("/medicalRecord")
 public void removeMedicalRecord(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName) {
 	
-	logger.info("Delete medicalRecord with params first name " + firstName + " and last name" + lastName + " called");
+	Logger.info("Delete medicalRecord with params first name " + firstName + " and last name" + lastName + " called");
 	medicalRecordService.removeMedicalRecord(firstName, lastName);
 }
 
 @PutMapping("/medicalRecord")
 public void updateMedicalRecord(MedicalRecord medicalRecord) {
 	
-	logger.info("Put medicalRecord update called");
+	Logger.info("Put medicalRecord update called");
 	
 	medicalRecordService.updateMedicalRecord(medicalRecord);
 }
@@ -168,7 +165,7 @@ public void updateMedicalRecord(MedicalRecord medicalRecord) {
 @PostMapping("/fireStation")
 public void addFireStation(@RequestParam("stationNumber") String stationNumber, @RequestParam("address") String address) {
 	
-	logger.info("Post fireStation add called");
+	Logger.info("Post fireStation add called");
 	
 	fireStationService.addFireStation(stationNumber,address);
 }
@@ -176,16 +173,21 @@ public void addFireStation(@RequestParam("stationNumber") String stationNumber, 
 @PutMapping("/fireStation")
 public void updateFireStation(@RequestParam("stationNumber") String newStationNumber,@RequestParam("address") String address) {
 	
-	logger.info("Put fireStation update called with params stationNumber " + newStationNumber + " and address " + address + " called");
+	Logger.info("Put fireStation update called with params stationNumber " + newStationNumber + " and address " + address + " called");
 	fireStationService.updateFirestation(newStationNumber,address);
 }
 
 @DeleteMapping("/fireStation")
 public void removeFireStationAddress(@RequestParam("address") String address) {
 	
-	logger.info("Delete fireStation with param address " + address + " called");
+	Logger.info("Delete fireStation with param address " + address + " called");
 	
-		fireStationService.removeFireStation(address);		
+		try {
+			fireStationService.removeFireStation(address);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
 	
 }
 

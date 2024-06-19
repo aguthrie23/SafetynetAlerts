@@ -1,19 +1,20 @@
 package com.openclassrooms.safetynet;
 
-import static org.mockito.Mockito.verify;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
+
 
 import com.openclassrooms.safetynet.domain.Person;
+import com.openclassrooms.safetynet.exception.DataNotFoundException;
 import com.openclassrooms.safetynet.repository.PersonRepository;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 
 
 public class PersonRepositoryTest {
@@ -47,10 +48,23 @@ public class PersonRepositoryTest {
 	public void testRemovePerson() {
 		personRepository.addPerson(person1);
 		personRepository.addPerson(person2);
-		personRepository.removePerson(person2.getFirstName(), person2.getLastName());
+		try {
+			personRepository.removePerson(person2.getFirstName(), person2.getLastName());
+		} catch (DataNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		assertEquals(personRepository.getPersons().size(), 1);
 		
 	}
+	
+	@Test
+	public void testRemovePersonException() {
+	
+			Throwable exception = assertThrows(Exception.class, () -> personRepository.removePerson(person2.getFirstName(), person2.getLastName()));
+			assertNotNull(exception);
+		
+	}	
 	
 	@Test
 	public void testGetPersonByFirstLastName() {
@@ -89,13 +103,33 @@ public class PersonRepositoryTest {
 	
 	@Test 
 	public void testUpdatePerson () {
-		Person person = new Person("New","Guy","123-456-7890","23059","123 main st","Richmond","richmond@test.com");
-		personRepository.addPerson(person);
-		personRepository.addPerson(person1);
-		person.setEmail("newEmail@test.com");
-		personRepository.updatePerson(person);
-		assertEquals("newEmail@test.com", personRepository.getPersons().get(0).getEmail());		
+		try {
+			Person person = new Person("New","Guy","123-456-7890","23059","123 main st","Richmond","richmond@test.com");
+			personRepository.addPerson(person);
+			personRepository.addPerson(person1);
+			person.setEmail("newEmail@test.com");
+			personRepository.updatePerson(person);
+			assertEquals("newEmail@test.com", personRepository.getPersons().get(0).getEmail());
+		} catch (DataNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
 		
 	}
+	
+	@Test 
+	public void testUpdatePersonException () {
+	//	try {
+			Person person = new Person("New","Guy","123-456-7890","23059","123 main st","Richmond","richmond@test.com");
+			personRepository.addPerson(person);
+		//	personRepository.addPerson(person1);
+			person.setEmail("newEmail@test.com");
+		//	personRepository.updatePerson(person1);
+			
+		Throwable exception = assertThrows(Exception.class, () -> personRepository.updatePerson(person1));
+		assertNotNull(exception);
+			
+		
+	}	
 	
 }

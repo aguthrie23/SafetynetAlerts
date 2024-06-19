@@ -1,7 +1,5 @@
 package com.openclassrooms.safetynet.domain;
 
-import org.springframework.stereotype.Component;
-
 
 public class Person {
 	
@@ -14,9 +12,6 @@ public class Person {
 	public String email;
 	
 	
-
- 
- 
 public String getFirstName() {
 	return firstName;
 }
@@ -110,8 +105,5 @@ public Person(String firstName, String lastName, String phone, String zip, Strin
 }
 
 
- 
- 
-	
 
 }

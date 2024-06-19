@@ -1,7 +1,6 @@
 package com.openclassrooms.safetynet.repository;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -9,6 +8,7 @@ import java.util.Set;
 import org.springframework.stereotype.Repository;
 
 import com.openclassrooms.safetynet.domain.FireStations;
+import com.openclassrooms.safetynet.exception.DataNotFoundException;
 
 @Repository
 public class FireStationsRepository {
@@ -47,7 +47,7 @@ public class FireStationsRepository {
 		}
 	
 
-	public void removeFireStationAddress(String address) {
+	public void removeFireStationAddress(String address) throws DataNotFoundException {
 		
 		Set<String> set = new HashSet<>();
 		String existStationNum = null;
@@ -68,12 +68,14 @@ public class FireStationsRepository {
 		
 			if (fireToRemove != null) {
 				fireStations.remove(fireToRemove);
-			//}
 			
 			
 			FireStations addNewFirestation = new FireStations(existStationNum);
 			set.forEach(a -> addNewFirestation.addAddress(a));
 			addFireStation(addNewFirestation);
+			}
+			else {
+				throw new DataNotFoundException("Firestation address not found with address " + address);
 			}
 			
 	}

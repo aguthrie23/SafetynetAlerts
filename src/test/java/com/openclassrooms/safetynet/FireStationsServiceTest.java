@@ -1,7 +1,6 @@
 package com.openclassrooms.safetynet;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -22,17 +21,14 @@ import com.openclassrooms.safetynet.domain.MedicalRecord;
 import com.openclassrooms.safetynet.domain.Person;
 import com.openclassrooms.safetynet.domain.PersonMedicalRecord;
 import com.openclassrooms.safetynet.domain.PersonServiced;
+import com.openclassrooms.safetynet.exception.DataNotFoundException;
 import com.openclassrooms.safetynet.repository.FireStationsRepository;
-import com.openclassrooms.safetynet.repository.MedicalRecordsRepository;
-
 import com.openclassrooms.safetynet.service.FireStationService;
 
 import com.openclassrooms.safetynet.service.PersonService;
 
-import static org.assertj.core.api.Assertions.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.*;
 
 public class FireStationsServiceTest {
@@ -64,46 +60,55 @@ public class FireStationsServiceTest {
 	@Test
 	public void testRemoveFireStation() {
 
-		String address = "testAddress";
-		FireStationsRepository fireStationsRepository = Mockito.mock(FireStationsRepository.class);
-		FireStationService fireStationSvc = new FireStationService(fireStationsRepository, null);
-		
+		try {
+			String address = "testAddress";
+			FireStationsRepository fireStationsRepository = Mockito.mock(FireStationsRepository.class);
+			FireStationService fireStationSvc = new FireStationService(fireStationsRepository, null);
+			
 
-		fireStationSvc.removeFireStation(address);
-		verify(fireStationsRepository,times(1)).removeFireStationAddress(address);
+			fireStationSvc.removeFireStation(address);
+			verify(fireStationsRepository,times(1)).removeFireStationAddress(address);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	@Test
 	public void testUpdateFireStation() {
 		
-		FireStationsRepository fireStationsRepository = Mockito.mock(FireStationsRepository.class);
-		FireStationService fireStationSvc = new FireStationService(fireStationsRepository, null);
-		
-		String stationNum = "1";
-		String address1 = "123 Main St"; 
-		String address2 = "999 filler";
-		String newStationNumString = "2";
-		FireStations fireStations1 = new FireStations(stationNum);
-		fireStations1.addAddress(address1);
-		
-		String address3 = "456 Main St";
-		fireStations1.addAddress(address2);
-		
-		FireStations fireStations2 = new FireStations(newStationNumString);
-		fireStations2.addAddress(address2);
-		
+		try {
+			FireStationsRepository fireStationsRepository = Mockito.mock(FireStationsRepository.class);
+			FireStationService fireStationSvc = new FireStationService(fireStationsRepository, null);
+			
+			String stationNum = "1";
+			String address1 = "123 Main St"; 
+			String address2 = "999 filler";
+			String newStationNumString = "2";
+			FireStations fireStations1 = new FireStations(stationNum);
+			fireStations1.addAddress(address1);
+					
+			fireStations1.addAddress(address2);
+			
+			FireStations fireStations2 = new FireStations(newStationNumString);
+			fireStations2.addAddress(address2);
+			
 
-		
-		List <FireStations> listFireStations = new ArrayList<FireStations>();
-		listFireStations.add(fireStations1);
-		listFireStations.add(fireStations2);
-		
-		when(fireStationsRepository.getFireStations()).thenReturn(listFireStations);
-		
-		fireStationSvc.updateFirestation(newStationNumString,address1);
-		//verify(fireStationsRepository,times(1)).addFireStation(fireStations);
-		verify(fireStationsRepository,times(1)).removeFireStationAddress(address1);
-		//	verify(fireStationsRepository, times(1)).addFireStation(new FireStations(newStationNumString).addAddress(address1));
+			
+			List <FireStations> listFireStations = new ArrayList<FireStations>();
+			listFireStations.add(fireStations1);
+			listFireStations.add(fireStations2);
+			
+			when(fireStationsRepository.getFireStations()).thenReturn(listFireStations);
+			
+			fireStationSvc.updateFirestation(newStationNumString,address1);
+			//verify(fireStationsRepository,times(1)).addFireStation(fireStations);
+			verify(fireStationsRepository,times(1)).removeFireStationAddress(address1);
+			//	verify(fireStationsRepository, times(1)).addFireStation(new FireStations(newStationNumString).addAddress(address1));
+		} catch (DataNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	@Test
@@ -139,30 +144,35 @@ public class FireStationsServiceTest {
 	public void testUpdateFireStationNewFireStation() {
 		
 		
-		FireStationsRepository fireStationsRepository = Mockito.mock(FireStationsRepository.class);
-		FireStationService fireStationSvc = new FireStationService(fireStationsRepository, null);
-		
-		String stationNum = "1";
-		String address1 = "123 Main St"; 
-		
-		FireStations fireStations1 = new FireStations(stationNum);
-		fireStations1.addAddress(address1);
-		
-		List <FireStations> listFireStations = new ArrayList<FireStations>();
-		listFireStations.add(fireStations1);		
-		
-	//	String address2 = "999 filler";
-		String newStationNumString = "2";
+		try {
+			FireStationsRepository fireStationsRepository = Mockito.mock(FireStationsRepository.class);
+			FireStationService fireStationSvc = new FireStationService(fireStationsRepository, null);
+			
+			String stationNum = "1";
+			String address1 = "123 Main St"; 
+			
+			FireStations fireStations1 = new FireStations(stationNum);
+			fireStations1.addAddress(address1);
+			
+			List <FireStations> listFireStations = new ArrayList<FireStations>();
+			listFireStations.add(fireStations1);		
+			
+//	String address2 = "999 filler";
+			String newStationNumString = "2";
 
 
-		FireStations addNewFirestation = new FireStations(newStationNumString).addAddress(address1);
-				
-		when(fireStationsRepository.getFireStations()).thenReturn(listFireStations);
-		
-		fireStationSvc.updateFirestation(newStationNumString,address1);
-		
-		verify(fireStationsRepository,times(1)).removeFireStationAddress(address1);
-		verify(fireStationsRepository, times(1)).addFireStation(any());
+			// FireStations addNewFirestation = new FireStations(newStationNumString).addAddress(address1);
+					
+			when(fireStationsRepository.getFireStations()).thenReturn(listFireStations);
+			
+			fireStationSvc.updateFirestation(newStationNumString,address1);
+			
+			verify(fireStationsRepository,times(1)).removeFireStationAddress(address1);
+			verify(fireStationsRepository, times(1)).addFireStation(any());
+		} catch (DataNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 
@@ -182,7 +192,7 @@ public class FireStationsServiceTest {
 		String address = "123 Main St"; 
 		String fNameString = "Test";
 		
-		MedicalRecordsRepository medicalRecordsRepository = new MedicalRecordsRepository();
+		
 		String med1 = "ibupurin:200mg";
 		String med2 = "advil:10mg";
 		List<String> medicationsList = new ArrayList<String>();
@@ -291,7 +301,7 @@ public class FireStationsServiceTest {
 		List <String> fireHouseNumbersList = new ArrayList<String>();
 		fireHouseNumbersList.add(fireHouseNumber);		
 		
-		MedicalRecordsRepository medicalRecordsRepository = new MedicalRecordsRepository();
+		
 		String med1 = "ibupurin:200mg";
 		String med2 = "advil:10mg";
 		List<String> medicationsList = new ArrayList<String>();
@@ -347,7 +357,7 @@ public class FireStationsServiceTest {
 		List <String> fireHouseNumbersList = new ArrayList<String>();
 		fireHouseNumbersList.add(fireHouseNumber);		
 		
-		MedicalRecordsRepository medicalRecordsRepository = new MedicalRecordsRepository();
+		
 		String med1 = "ibupurin:200mg";
 		String med2 = "advil:10mg";
 		List<String> medicationsList = new ArrayList<String>();
@@ -369,7 +379,7 @@ public class FireStationsServiceTest {
         retSvcPersonAndMedRecList.add(personServiced);	
         
      
-        List <PersonServiced> personInfoList = new ArrayList<PersonServiced>(); 		
+      //  List <PersonServiced> personInfoList = new ArrayList<PersonServiced>(); 		
 		
 		when(fireStationsRepository.getFireStationsByStationNumber(fireHouseNumber)).thenReturn(fireStationsSet);
 		

@@ -9,14 +9,14 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
+
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.mockito.MockitoFramework;
+
 
 import com.openclassrooms.safetynet.controller.SafetyNetController;
 import com.openclassrooms.safetynet.domain.ChildAndPerson;
@@ -27,8 +27,6 @@ import com.openclassrooms.safetynet.domain.Person;
 import com.openclassrooms.safetynet.domain.PersonInfo;
 import com.openclassrooms.safetynet.domain.PersonMedicalRecord;
 import com.openclassrooms.safetynet.domain.PersonServiced;
-import com.openclassrooms.safetynet.repository.FireStationsRepository;
-import com.openclassrooms.safetynet.repository.MedicalRecordsRepository;
 import com.openclassrooms.safetynet.repository.PersonRepository;
 import com.openclassrooms.safetynet.service.FireStationService;
 import com.openclassrooms.safetynet.service.MedicalRecordService;
@@ -116,9 +114,9 @@ public class SafetyNetControllerTest {
 		List<String> allergiesList = new ArrayList<String>();
 		allergiesList.add(allergy1);
 		allergiesList.add(allergy2);
-		MedicalRecord medicalRecord = new MedicalRecord(fNameString, "Tester", "08/21/1947", medicationsList, allergiesList);		
+		MedicalRecord medicalRecord = new MedicalRecord(fNameString, lNameString, "08/21/1947", medicationsList, allergiesList);		
 		
-		Person person = new Person(fNameString,"Tester","123-456-7890","23059",address,"richmond","tester@test.com");
+		Person person = new Person(fNameString,lNameString,"123-456-7890","23059",address,"richmond","tester@test.com");
 		
         PersonMedicalRecord personMedicalRecord = new PersonMedicalRecord(person, medicalRecord);
 	    
@@ -190,7 +188,7 @@ public class SafetyNetControllerTest {
 		String address = "123 Main St"; 
 		String fNameString = "Test";
 		
-		MedicalRecordsRepository medicalRecordsRepository = new MedicalRecordsRepository();
+		
 		String med1 = "ibupurin:200mg";
 		String med2 = "advil:10mg";
 		List<String> medicationsList = new ArrayList<String>();
@@ -250,7 +248,7 @@ public class SafetyNetControllerTest {
 		List <String> fireHouseNumbersList = new ArrayList<String>();
 		fireHouseNumbersList.add(fireHouseNumber);		
 		
-		MedicalRecordsRepository medicalRecordsRepository = new MedicalRecordsRepository();
+		
 		String med1 = "ibupurin:200mg";
 		String med2 = "advil:10mg";
 		List<String> medicationsList = new ArrayList<String>();
@@ -358,7 +356,7 @@ public class SafetyNetControllerTest {
 		String fName = "first";
 		String lName = "last";
 		
-		Person person = new Person(fName,lName,"123-456-7890","23059","123 main st","richmond","tester@test.com");
+	//	Person person = new Person(fName,lName,"123-456-7890","23059","123 main st","richmond","tester@test.com");
 		
 
 		safetyNetController.removePerson(fName, lName);
@@ -431,10 +429,7 @@ public class SafetyNetControllerTest {
 		
 		List<String> allergiesList = new ArrayList<String>();
 		allergiesList.add(allergy1);
-		allergiesList.add(allergy2);		
-		MedicalRecord medicalRecord1 = new MedicalRecord(fName, lName, "08/21/1947", medicationsList, allergiesList);			
-
-		
+		allergiesList.add(allergy2);					
 
 		safetyNetController.removeMedicalRecord(fName, lName);
 		verify(medicalRecordService,times(1)).removeMedicalRecord(fName, lName);
@@ -508,16 +503,21 @@ public class SafetyNetControllerTest {
 	@Test
 	public void testRemoveFireStation() {
 		
-		PersonService personService = Mockito.mock(PersonService.class);
-		FireStationService fireStationService = Mockito.mock(FireStationService.class);
-		MedicalRecordService medicalRecordService = Mockito.mock(MedicalRecordService.class);
-		
-		SafetyNetController safetyNetController = new SafetyNetController(personService, fireStationService, medicalRecordService);		
+		try {
+			PersonService personService = Mockito.mock(PersonService.class);
+			FireStationService fireStationService = Mockito.mock(FireStationService.class);
+			MedicalRecordService medicalRecordService = Mockito.mock(MedicalRecordService.class);
+			
+			SafetyNetController safetyNetController = new SafetyNetController(personService, fireStationService, medicalRecordService);		
 
-		String address = "123 Main St";
+			String address = "123 Main St";
 
-		safetyNetController.removeFireStationAddress(address);
-		verify(fireStationService,times(1)).removeFireStation(address);			
+			safetyNetController.removeFireStationAddress(address);
+			verify(fireStationService,times(1)).removeFireStation(address);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}			
 		
 	}
 		
@@ -526,7 +526,6 @@ public class SafetyNetControllerTest {
 	@Test
 	public void testGetAllPersons() {
 	
-		PersonRepository personRepository = Mockito.mock(PersonRepository.class);
 		
 		PersonService personSvc = Mockito.mock(PersonService.class);
 		FireStationService fireStationSvc = Mockito.mock(FireStationService.class);
@@ -552,8 +551,7 @@ public class SafetyNetControllerTest {
 	@Test
 	public void testGetEmailByCity() {
 		
-		PersonRepository personRepository = Mockito.mock(PersonRepository.class);
-		
+				
 		PersonService personSvc = Mockito.mock(PersonService.class);
 		FireStationService fireStationSvc = Mockito.mock(FireStationService.class);
 		MedicalRecordService medicalRecordSvc = Mockito.mock(MedicalRecordService.class);
@@ -581,8 +579,7 @@ assertNotNull(emailsList);
 	@Test
 	public void testGetAllFireStations() {
 		
-		PersonRepository personRepository = Mockito.mock(PersonRepository.class);
-		
+				
 		PersonService personSvc = Mockito.mock(PersonService.class);
 		FireStationService fireStationSvc = Mockito.mock(FireStationService.class);
 		MedicalRecordService medicalRecordSvc = Mockito.mock(MedicalRecordService.class);
@@ -604,8 +601,7 @@ assertNotNull(emailsList);
 	@Test
 	public void testGetAllMedicalRecords() {
 		
-		PersonRepository personRepository = Mockito.mock(PersonRepository.class);
-		
+				
 		PersonService personSvc = Mockito.mock(PersonService.class);
 		FireStationService fireStationSvc = Mockito.mock(FireStationService.class);
 		MedicalRecordService medicalRecordSvc = Mockito.mock(MedicalRecordService.class);
@@ -644,8 +640,7 @@ assertNotNull(emailsList);
 	@Test
 	public void testGetPersonMed() {
 
-		PersonRepository personRepository = Mockito.mock(PersonRepository.class);
-		
+				
 		PersonService personSvc = Mockito.mock(PersonService.class);
 		FireStationService fireStationSvc = Mockito.mock(FireStationService.class);
 		MedicalRecordService medicalRecordSvc = Mockito.mock(MedicalRecordService.class);
@@ -688,7 +683,7 @@ assertNotNull(emailsList);
 	@Test
 	public void testGetMedicalRecordByFirstLast() {
 
-		PersonRepository personRepository = Mockito.mock(PersonRepository.class);
+	
 		
 		PersonService personSvc = Mockito.mock(PersonService.class);
 		FireStationService fireStationSvc = Mockito.mock(FireStationService.class);
